@@ -1,0 +1,31 @@
+.login {
+  padding: 20px;
+}
+
+.login h1 {
+  color: #282c34;
+}
+
+.login form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.login button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #282c34;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.login button:hover {
+  background-color: #4a4a4a;
+}

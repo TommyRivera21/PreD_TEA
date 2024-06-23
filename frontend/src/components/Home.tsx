@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../styles/Home.module.css';
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <h1>Sistema de Predicción del TEA</h1>
-      <Link to="/scan"><button>Realizar Escaneo</button></Link>
-      <Link to="/questionnaire"><button>Cuestionario</button></Link>
+    <div className={styles.home}>
+      <h1 className={styles.titleOne}>Tunito</h1>
+      <p className={styles.description}>Sistema de predicción para el diagnóstico preliminar del Trastorno del Espectro Autista en niños,mediante la aplicación de redes neuronales artificiales</p>
+      <Link className={styles.btnHome} to="/scan">Realizar diagnostico</Link>
     </div>
   );
 };

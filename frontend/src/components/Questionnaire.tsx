@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../styles/Questionnaire.module.css';
 
 const questions = [
   "Pregunta 1",
@@ -22,7 +23,7 @@ const Questionnaire: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles.questionnaire}>
       <h1>Cuestionario</h1>
       {questions.map((question, index) => (
         <div key={index}>

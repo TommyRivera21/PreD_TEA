@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import styles from '../styles/Scan.module.css';
 
 const Scan: React.FC = () => {
   const [countdown, setCountdown] = useState(10);
@@ -27,7 +28,7 @@ const Scan: React.FC = () => {
   }, [countdown]);
 
   return (
-    <div>
+    <div className={styles.scan}>
       <h1>Escaneo de Expresiones</h1>
       {countdown > 0 ? (
         <div>

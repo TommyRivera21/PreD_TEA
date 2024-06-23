@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
+import styles from '../styles/Login.module.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles.login}>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>

@@ -1,0 +1,57 @@
+.home {
+  background-image: url('../assets/autismo_fondo.png'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  width: 100vw;
+  height: 100vh; 
+  display: flex;
+  align-items: center;
+  flex-direction: column; 
+  align-items: flex-start; 
+  justify-content: center; 
+  color: white;
+  gap: 20px; 
+  padding-left: 20px; 
+}
+
+.titleOne {
+  color: white;
+  background-color: #e5b3fe;
+  text-align: left;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.description {
+  color: white;
+  background-color: #e5b3fe;
+  text-align: left;
+  padding: 10px;
+  max-width: 600px; /* Ajusta el ancho según sea necesario */
+  white-space: normal;
+  border-radius: 8px;
+}
+
+.btnHome {
+  border-radius: 8px;
+  border: 3px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #e5b3fe; 
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btnHome:hover {
+  background-color: white; 
+  color: #e5b3fe; 
+  border-color: #e5b3fe; 
+}
+
+.btnHome:focus,
+.btnHome:focus-visible {
+  outline: 10px auto -webkit-focus-ring-color;
+}

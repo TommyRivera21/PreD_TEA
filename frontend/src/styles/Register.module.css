@@ -1,0 +1,31 @@
+.register {
+  padding: 20px;
+}
+
+.register h1 {
+  color: #282c34;
+}
+
+.register form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.register input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.register button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #282c34;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.register button:hover {
+  background-color: #4a4a4a;
+}
