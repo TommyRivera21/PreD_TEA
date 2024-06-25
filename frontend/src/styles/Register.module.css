@@ -1,7 +1,14 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: white;
+  color: #333;
+  line-height: 1.6;
+}
+
 .registerContainer {
   padding: 20px;
   display: flex;
-  flex-direction: column;  /* Cambiado de row a column */
+  flex-direction: column;  
   justify-content: center;
   align-items: center;
   height: 100vh;  

@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { getCurrentToken } from './authService';
+import axios from "axios";
+import { getCurrentToken } from "./authService";
 
-const API_URL = 'http://localhost:5000'; // Reemplaza con la URL de tu backend
+const API_URL = "http://localhost:5000"; // Reemplaza con la URL de tu backend
 
 const api = axios.create({
   baseURL: API_URL,

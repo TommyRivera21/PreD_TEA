@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import styles from '../styles/Scan.module.css';
+import React, { useState, useRef, useEffect } from "react";
+import styles from "../styles/Scan.module.css";
 
 const Scan: React.FC = () => {
   const [countdown, setCountdown] = useState(10);
@@ -8,7 +8,9 @@ const Scan: React.FC = () => {
   useEffect(() => {
     const getVideo = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styles from '../styles/Questionnaire.module.css';
+import React, { useState } from "react";
+import styles from "../styles/Questionnaire.module.css";
 
 const questions = [
   "Pregunta 1",
@@ -9,7 +9,9 @@ const questions = [
 ];
 
 const Questionnaire: React.FC = () => {
-  const [responses, setResponses] = useState<string[]>(Array(questions.length).fill(''));
+  const [responses, setResponses] = useState<string[]>(
+    Array(questions.length).fill("")
+  );
 
   const handleResponseChange = (index: number, value: string) => {
     const newResponses = [...responses];

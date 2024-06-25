@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from '../styles/Results.module.css';
+import React from "react";
+import styles from "../styles/Results.module.css";
 
 const Results: React.FC = () => {
   return (
