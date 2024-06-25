@@ -1,20 +1,39 @@
-.register {
+.registerContainer {
   padding: 20px;
+  display: flex;
+  flex-direction: column;  /* Cambiado de row a column */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;  
 }
 
-.register h1 {
-  color: #282c34;
+.registerContainer h1 {
+  color: white;
+  background-color: #e5b3fe;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  margin-bottom: 20px; 
+  width: 100%;
+  max-width: 300px;
 }
 
-.register form {
+.registerContainer form {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  max-width: 300px;
 }
 
-.register input {
+.registerContainer input {
+  width: 100%;
   padding: 10px;
   font-size: 16px;
+  background-color: white;
+  border: 2px solid #e5b3fe;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .register button {
@@ -26,6 +45,24 @@
   cursor: pointer;
 }
 
-.register button:hover {
-  background-color: #4a4a4a;
+.btnRegister {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #e5b3fe;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btnRegister:hover {
+  background-color: white;
+  color: #e5b3fe;
+  border: 2px solid #e5b3fe;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
 }

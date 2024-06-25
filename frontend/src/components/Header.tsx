@@ -11,7 +11,6 @@ const Header: React.FC = () => {
       </Link>
       <nav className={styles.navLinks}>
         <Link to="/">Home</Link>
-        <Link to="/scan">Diagnostico</Link>
         <Link to="/login">Login</Link>
       </nav>
     </header>
