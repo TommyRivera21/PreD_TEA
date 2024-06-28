@@ -1,0 +1,20 @@
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, LSTM, TimeDistributed
+
+def create_video_model():
+    model = Sequential([
+        TimeDistributed(Conv2D(32, (3, 3), activation='relu'), input_shape=(None, 64, 64, 3)),  # Filtros, tamaño del kernel, función de activación
+        TimeDistributed(MaxPooling2D((2, 2))),  # Tamaño del pool
+        TimeDistributed(Conv2D(64, (3, 3), activation='relu')),
+        TimeDistributed(MaxPooling2D((2, 2))),
+        TimeDistributed(Flatten()),
+        LSTM(64, return_sequences=False),  # Número de unidades en la capa LSTM, retorno de secuencias
+        Dense(128, activation='relu'),  # Número de unidades en la capa densa, función de activación
+        Dense(1, activation='sigmoid')  # Número de unidades en la capa de salida, función de activación
+    ])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])  # Optimizador, función de pérdida, métricas
+    return model
+
+video_model = create_video_model()
+video_model.save('models/video_model.h5')

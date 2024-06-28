@@ -1,37 +1,33 @@
-import os
 from flask import Flask
-from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-from dotenv import load_dotenv
-from .neural_network import init_model
+from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
-
-    load_dotenv()
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-    app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
-    app.config['MODEL_PATH'] = os.getenv('MODEL_PATH')
-
+    app.config.from_object('app.config.Config')
+    
     db.init_app(app)
-    migrate = Migrate(app, db)
-    jwt = JWTManager(app)
+    migrate.init_app(app, db)
+    
+    JWTManager(app)
 
-    from .routes import main
-    app.register_blueprint(main)
+    CORS(app)
+    
+    from .routes.auth import auth_bp
+    from .routes.upload import upload_bp
+    from .routes.questionnaire import questionnaire_bp
+    from .routes.results import results_bp
+    from .routes.home import home_bp
 
-    with app.app_context():
-        try:
-            db.create_all()
-        except Exception as e:
-            app.logger.error(f"Error creating database tables: {e}")
-        init_model()
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(upload_bp)
+    app.register_blueprint(questionnaire_bp)
+    app.register_blueprint(results_bp)
+    app.register_blueprint(home_bp)
 
     return app

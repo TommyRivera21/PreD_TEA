@@ -1,11 +1,9 @@
-// src/services/authService.ts
-
 import axios from "axios";
 import { API_URL, TOKEN_KEY } from "../constants";
 
 // Iniciar sesión y obtener el token
 export const loginUser = async (email: string, password: string) => {
-  const response = await axios.post(`${API_URL}/login`, { email, password });
+  const response = await axios.post(`${API_URL}/auth/login`, { email, password });
   if (response.data.token) {
     localStorage.setItem(TOKEN_KEY, JSON.stringify(response.data));
   }
@@ -18,7 +16,7 @@ export const registerUser = async (
   email: string,
   password: string
 ) => {
-  const response = await axios.post(`${API_URL}/register`, {
+  const response = await axios.post(`${API_URL}/auth/register`, {
     name,
     email,
     password,
