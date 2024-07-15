@@ -1,47 +1,48 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "../styles/Scan.module.css";
+import { createDiagnostic } from "../services/api";
 
 const Scan: React.FC = () => {
-  const [countdown, setCountdown] = useState(10);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getVideo = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error(err);
+  const handleCreateDiagnostic = async (scanType: "video" | "image") => {
+    try {
+      const diagnosticResponse = await createDiagnostic(scanType);
+
+      if (scanType === "video") {
+        window.location.href = `/video-scanning/${diagnosticResponse.id}`;
+      } else {
+        window.location.href = `/image-scanning/${diagnosticResponse.id}`;
       }
-    };
-
-    getVideo();
-  }, []);
-
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
+    } catch (error) {
+      console.error("Error creating diagnostic:", error);
+      setError("Error al crear el diagnóstico. Por favor, intente de nuevo.");
     }
-  }, [countdown]);
+  };
+
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
 
   return (
     <div className={styles.scan}>
-      <h1>Escaneo de Expresiones</h1>
-      {countdown > 0 ? (
-        <div>
-          <p>Iniciando en: {countdown}</p>
-        </div>
-      ) : (
-        <div>
-          <video ref={videoRef} autoPlay></video>
-          {/* Aquí agregar la lógica para grabar el video */}
-        </div>
-      )}
+      <h1 className={styles.titleDiagnosticType}>
+        Seleccione el tipo de diagnóstico
+      </h1>
+      <div className={styles.scanOptions}>
+        <button
+          onClick={() => handleCreateDiagnostic("video")}
+          className={styles.btnScan}
+        >
+          Diagnostico por Video
+        </button>
+        <button
+          onClick={() => handleCreateDiagnostic("image")}
+          className={styles.btnScan}
+        >
+          Diagnostico por Imágenes
+        </button>
+      </div>
     </div>
   );
 };

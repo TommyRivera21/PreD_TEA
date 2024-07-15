@@ -6,20 +6,19 @@ body {
 }
 
 .loginContainer {
-  padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh; 
 }
 
-.loginContainer h1 {
+.titleLogin {
   color: white;
   background-color: #e5b3fe;
-  padding: 5px;
   border-radius: 5px;
   text-align: center;
-  margin-bottom: 20px; 
+  margin-bottom: 10px;
+  padding: 10px;
 }
 
 .loginContainer form {
@@ -27,6 +26,7 @@ body {
   flex-direction: column;
   gap: 10px;
   width: 300px;
+  padding: 10px;
 }
 
 .loginContainer input {

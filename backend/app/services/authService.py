@@ -1,29 +1,29 @@
+from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import Users, AuthToken, db
 
 def login(email, password):
-    users = Users.query.filter_by(email=email).first()
-    if users and check_password_hash(users.password, password):
-        token = generate_password_hash(users.email + str(users.created_at))
-        auth_token = AuthToken(users_id=users.id, token=token)
-        db.session.add(auth_token)
-        db.session.commit()
+    user = Users.query.filter_by(email=email).first()
+    if user and check_password_hash(user.password, password):
+        access_token = create_access_token(identity={'id': user.id, 'email': user.email})
         return {
-            'token': token,
-            'user': users.to_dict()
+            'access_token': access_token,
+            'user': user  
         }
     return None
 
 def register(name, email, password):
     hashed_password = generate_password_hash(password)
-    new_users = Users(name=name, email=email, password=hashed_password)
-    db.session.add(new_users)
+    new_user = Users(name=name, email=email, password=hashed_password)
+    db.session.add(new_user)
     db.session.commit()
-    return new_users
+    return new_user
 
 def logout(token):
-    AuthToken.query.filter_by(token=token).delete()
-    db.session.commit()
+    auth_token = AuthToken.query.filter_by(token=token).first()
+    if auth_token:
+        db.session.delete(auth_token)
+        db.session.commit()
 
 def getCurrentToken():
     auth_token = AuthToken.query.first()

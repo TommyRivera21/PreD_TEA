@@ -2,6 +2,7 @@ from .authService import login, register, logout, getCurrentToken, getCurrentUse
 from .fileService import save_image, save_video
 from .questionnaireService import QuestionnaireService
 from .resultService import save_result
+from .diagnosticService import DiagnosticService
 
 __all__ = [
     'login',
@@ -12,5 +13,6 @@ __all__ = [
     'save_image',
     'save_video',
     'QuestionnaireService',
-    'save_result'
+    'save_result',
+    'DiagnosticService'
 ]

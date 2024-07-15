@@ -1,7 +1,32 @@
 .scan {
-  padding: 20px;
+  text-align: center;
+  margin-top: 100px;
+  align-items: center;
 }
 
-.scan h1 {
-  color: #282c34;
+.titleDiagnosticType {
+  background-color: #d58cfc;
+  padding: 20px;
+  color: white;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.btnScan {
+  background-color: #d58cfc;
+  color: white;
+  border: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 20px;
+  cursor: pointer;
+  border: 2px solid #d58cfc;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.btnScan:hover {
+  background-color: white;
+  color: #d58cfc;
+  border: 2px solid #d58cfc;
 }

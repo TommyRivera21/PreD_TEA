@@ -12,12 +12,13 @@ def submit_questionnaire():
     
     users_id = data.get('users_id')
     answers = data.get('answers')
+    diagnostic_id = data.get('diagnostic_id')
     
-    if not users_id or not answers:
-        return jsonify({"error": "Missing user_id or answers"}), 400
+    if not users_id or not answers or not diagnostic_id:
+        return jsonify({"error": "Missing user_id, answers, or diagnostic_id"}), 400
 
     try:
-        new_questionnaire = Questionnaire(users_id=users_id, answers=answers)
+        new_questionnaire = Questionnaire(users_id=users_id, answers=answers, diagnostic_id=diagnostic_id)
         db.session.add(new_questionnaire)
         db.session.commit()
         return jsonify({"message": "Questionnaire submitted successfully", "questionnaire_id": new_questionnaire.id}), 201

@@ -16,7 +16,7 @@
 .linkLogo {
   display: flex;
   align-items: center;
-  margin-right: auto; 
+  margin-right: auto;
 }
 
 .linkLogo img {
@@ -45,7 +45,7 @@
 }
 
 .navLinks a::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -58,9 +58,38 @@
 }
 
 .navLinks a:hover {
-  color: white; 
+  color: white;
 }
 
 .navLinks a:hover::before {
   transform: scaleX(1);
+}
+
+.btnLogout {
+  background-color: #d58cfc;
+  color: white;
+  border: none;
+  font-size: 18px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.3s;
+}
+
+.btnLogout::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background-color: white;
+  left: 0;
+  bottom: 0;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.btnLogout:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
