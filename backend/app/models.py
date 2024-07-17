@@ -36,7 +36,7 @@ class Image(db.Model):
 class Questionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    answers = db.Column(db.JSON, nullable=False)
+    qa_pairs = db.Column(db.JSON, nullable=False)  
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     results = db.relationship('Result', backref='questionnaire', lazy=True)
     diagnostic_id = db.Column(db.Integer, db.ForeignKey('diagnostic.id'), nullable=True)
@@ -61,6 +61,7 @@ class Diagnostic(db.Model):
     result_id = db.Column(db.Integer, db.ForeignKey('result.id'), nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     user = db.relationship('Users', back_populates='diagnostics')
+
 class AuthToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

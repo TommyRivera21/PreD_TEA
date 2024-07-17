@@ -1,0 +1,28 @@
+export const questions = [
+  "¿Su hijo(a) usa palabras para comunicar sus necesidades y deseos?",
+  "¿Su hijo(a) hace contacto visual mientras habla con otras personas?",
+  "¿Su hijo(a) responde a su nombre cuando se le llama?",
+  "¿Su hijo(a) muestra interés en jugar con otros niños?",
+  "¿Su hijo(a) imita las acciones de otros (por ejemplo, simula cocinar, imita gestos)?",
+  "¿Su hijo(a) parece ajeno(a) a los sentimientos de los demás?",
+  "¿Su hijo(a) realiza movimientos repetitivos como aletear las manos, balancearse o girar?",
+  "¿Su hijo(a) tiene rituales o rutinas que sigue de manera rígida?",
+  "¿Su hijo(a) juega con juguetes de manera inusual (por ejemplo, alinear objetos en lugar de usarlos de manera imaginativa)?",
+  "¿Su hijo(a) muestra una sensibilidad extrema a ciertos sonidos, luces o texturas?",
+  "¿Su hijo(a) parece no notar el dolor o la temperatura de manera adecuada?",
+  "¿Su hijo(a) tiene un desarrollo del lenguaje retrasado en comparación con otros niños de su edad?",
+  "¿Su hijo(a) repite palabras o frases de manera repetitiva (ecolalia)?",
+  "¿Su hijo(a) usa frases y oraciones que no parecen tener sentido en el contexto?",
+  "¿Su hijo(a) participa en juegos de simulación o juego imaginativo (por ejemplo, jugar a la casita, hacer de cuenta que es un superhéroe)?",
+  "¿Su hijo(a) se interesa en los juguetes de manera típica para su edad (por ejemplo, usar bloques para construir en lugar de solo alinearlos)?",
+  "¿Su hijo(a) comparte intereses con otros niños (por ejemplo, muestra un juguete a otro niño para que lo vea)?",
+  "¿Su hijo(a) muestra torpeza o falta de coordinación motora?",
+  "¿Su hijo(a) tiene dificultades para aprender nuevas habilidades motoras (por ejemplo, andar en bicicleta, atarse los zapatos)?",
+  "¿Su hijo(a) tiene dificultades para mantener la atención en actividades o tareas?",
+  "¿Su hijo(a) parece hiperactivo(a) o tiene mucha energía?",
+  "¿Su hijo(a) inicia la interacción con compañeros o adultos (por ejemplo, iniciar una conversación, pedir jugar)?",
+  "¿Su hijo(a) se altera extremadamente por cambios menores o transiciones (por ejemplo, cambiar una rutina, ir a un lugar nuevo)?",
+  "¿Su hijo(a) tiene intereses intensos y enfocados que son inusuales en intensidad o enfoque (por ejemplo, un interés intenso en un tema u objeto específico)?",
+];
+
+export const answers = ["Rara vez", "Nunca", "Frecuentemente", "Siempre"];

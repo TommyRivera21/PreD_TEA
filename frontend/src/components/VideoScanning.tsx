@@ -76,6 +76,9 @@ const VideoScanning: React.FC = () => {
               parseInt(diagnosticId)
             );
             console.log("Video uploaded successfully:", response);
+
+            window.location.href = `/questionnaire/${diagnosticId}`;
+
           } catch (error) {
             console.error("Error uploading video:", error);
           }

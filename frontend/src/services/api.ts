@@ -12,6 +12,11 @@ interface UploadResponse {
   url: string;
 }
 
+interface QuestionnaireResponse {
+  message: string;
+  questionnaire_id: number;
+}
+
 const handleApiError = (error: unknown): never => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
@@ -46,15 +51,21 @@ export const createDiagnostic = async (
     };
 
     try {
-      const response: AxiosResponse<DiagnosticResponse> = await makeRequest(token);
+      const response: AxiosResponse<DiagnosticResponse> = await makeRequest(
+        token
+      );
       console.log("Diagnostic created successfully:", response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        // Token expirado, intentamos refrescar
         const newToken = await refreshToken();
-        const response: AxiosResponse<DiagnosticResponse> = await makeRequest(newToken);
-        console.log("Diagnostic created successfully after token refresh:", response.data);
+        const response: AxiosResponse<DiagnosticResponse> = await makeRequest(
+          newToken
+        );
+        console.log(
+          "Diagnostic created successfully after token refresh:",
+          response.data
+        );
         return response.data;
       }
       throw error;
@@ -75,16 +86,12 @@ export const uploadVideo = async (
     formData.append("diagnostic_id", diagnosticId.toString());
 
     const makeRequest = async (authToken: string) => {
-      return axios.post(
-        `${API_URL}/upload/video`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
+      return axios.post(`${API_URL}/upload/video`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
     };
 
     try {
@@ -93,10 +100,14 @@ export const uploadVideo = async (
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        // Token expirado, intentamos refrescar
         const newToken = await refreshToken();
-        const response: AxiosResponse<UploadResponse> = await makeRequest(newToken);
-        console.log("Video uploaded successfully after token refresh:", response.data);
+        const response: AxiosResponse<UploadResponse> = await makeRequest(
+          newToken
+        );
+        console.log(
+          "Video uploaded successfully after token refresh:",
+          response.data
+        );
         return response.data;
       }
       throw error;
@@ -117,16 +128,12 @@ export const uploadImages = async (
     formData.append("diagnostic_id", diagnosticId.toString());
 
     const makeRequest = async (authToken: string) => {
-      return axios.post(
-        `${API_URL}/upload/image`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
+      return axios.post(`${API_URL}/upload/image`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
     };
 
     try {
@@ -137,8 +144,59 @@ export const uploadImages = async (
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         // Token expirado, intentamos refrescar
         const newToken = await refreshToken();
-        const response: AxiosResponse<UploadResponse> = await makeRequest(newToken);
-        console.log("Images uploaded successfully after token refresh:", response.data);
+        const response: AxiosResponse<UploadResponse> = await makeRequest(
+          newToken
+        );
+        console.log(
+          "Images uploaded successfully after token refresh:",
+          response.data
+        );
+        return response.data;
+      }
+      throw error;
+    }
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+export const submitQuestionnaire = async (
+  diagnosticId: number,
+  responses: { question: string; answer: string }[]
+): Promise<QuestionnaireResponse> => {
+  try {
+    const token = getCurrentToken();
+    if (!token) throw new Error("No authentication token found");
+
+    const requestData = {
+      qa_pairs: responses,
+      diagnostic_id: diagnosticId,
+    };
+
+    const makeRequest = async (authToken: string) => {
+      return axios.post(`${API_URL}/questionnaire/submit`, requestData, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+    };
+
+    try {
+      const response: AxiosResponse<QuestionnaireResponse> = await makeRequest(
+        token
+      );
+      console.log("Questionnaire submitted successfully:", response.data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        
+        const newToken = await refreshToken();
+        const response: AxiosResponse<QuestionnaireResponse> =
+          await makeRequest(newToken);
+        console.log(
+          "Questionnaire submitted successfully after token refresh:",
+          response.data
+        );
         return response.data;
       }
       throw error;

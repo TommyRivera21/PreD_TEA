@@ -27,11 +27,16 @@ const ImageScanning: React.FC = () => {
       try {
         const response = await uploadImages(formData, parseInt(diagnosticId));
         console.log('Images uploaded successfully:', response);
+        
+        window.location.href = `/questionnaire/${diagnosticId}`;
+
       } catch (error) {
         console.error('Error uploading images:', error);
       }
     }
   };
+
+  console.log('Diagnostic ID received:', diagnosticId);
 
   return (
     <div className={styles.imageScanning}>

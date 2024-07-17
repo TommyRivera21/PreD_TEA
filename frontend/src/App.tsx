@@ -30,7 +30,7 @@ const App: React.FC = () => {
             <Route path={SCAN_ROUTE} element={<PrivateRoute><Scan /></PrivateRoute>} />
             <Route path={`${VIDEO_SCAN_ROUTE}/:diagnosticId`} element={<PrivateRoute><VideoScanning /></PrivateRoute>} />
             <Route path={`${IMAGE_SCAN_ROUTE}/:diagnosticId`} element={<PrivateRoute><ImageScanning /></PrivateRoute>} />
-            <Route path={QUESTIONNAIRE_ROUTE} element={<PrivateRoute><Questionnaire /></PrivateRoute>} />
+            <Route path={`${QUESTIONNAIRE_ROUTE}/:diagnosticId`} element={<PrivateRoute><Questionnaire /></PrivateRoute>} />
             <Route path={RESULTS_ROUTE} element={<PrivateRoute><Results /></PrivateRoute>} />
             <Route path={LOGIN_ROUTE} element={<Login />} />
             <Route path={REGISTER_ROUTE} element={<Register />} />

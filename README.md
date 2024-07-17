@@ -3,9 +3,9 @@
 ## Descripción
 Este proyecto implementa un sistema basado en redes neuronales artificiales para predecir y dar un diagnostico preliminar del Trastorno del Espectro Autista (TEA) en niños.
 
-#### Ejectur el proyecto
+#### Ejecucion del proyecto
 - `cd backend`: Permite entrar en el directorio.
-- `python manage.py`: Script para ejecutar la aplicación Flask.
+- `python manage.py run`: Script para ejecutar la aplicación Flask.
 
 ## Estructura del Proyecto
 
