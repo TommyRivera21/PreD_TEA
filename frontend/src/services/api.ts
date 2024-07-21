@@ -6,6 +6,7 @@ import { getCurrentToken, refreshToken } from "./authService";
 
 interface DiagnosticResponse {
   id: number;
+  diagnostic_type: "video" | "image";
 }
 
 interface UploadResponse {
@@ -39,7 +40,7 @@ export const createDiagnostic = async (
     if (!token) throw new Error("No authentication token found");
 
     const makeRequest = async (authToken: string) => {
-      return axios.post(
+      return axios.post<DiagnosticResponse>(
         `${API_URL}/diagnostic/create`,
         { scanType },
         {
@@ -189,7 +190,6 @@ export const submitQuestionnaire = async (
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        
         const newToken = await refreshToken();
         const response: AxiosResponse<QuestionnaireResponse> =
           await makeRequest(newToken);

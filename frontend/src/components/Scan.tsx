@@ -9,10 +9,12 @@ const Scan: React.FC = () => {
     try {
       const diagnosticResponse = await createDiagnostic(scanType);
 
-      if (scanType === "video") {
+      if (diagnosticResponse.diagnostic_type === "video") {
         window.location.href = `/video-scanning/${diagnosticResponse.id}`;
-      } else {
+      } else if (diagnosticResponse.diagnostic_type === "image") {
         window.location.href = `/image-scanning/${diagnosticResponse.id}`;
+      } else {
+        throw new Error("Tipo de diagnóstico no válido");
       }
     } catch (error) {
       console.error("Error creating diagnostic:", error);

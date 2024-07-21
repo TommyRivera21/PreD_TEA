@@ -49,19 +49,23 @@ class Result(db.Model):
     questionnaire_id = db.Column(db.Integer, db.ForeignKey('questionnaire.id'), nullable=False)
     autism_score = db.Column(db.Numeric(5, 2), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    video = db.relationship('Video', backref='results', lazy=True)
-    image = db.relationship('Image', backref='results', lazy=True)
+    diagnostic = db.relationship('Diagnostic', backref='result_reference', uselist=False)
 
 class Diagnostic(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=True)
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'), nullable=True)
     questionnaire_id = db.Column(db.Integer, db.ForeignKey('questionnaire.id'), nullable=True)
     result_id = db.Column(db.Integer, db.ForeignKey('result.id'), nullable=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    diagnostic_type = db.Column(db.String(50), nullable=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=True)
+    
     user = db.relationship('Users', back_populates='diagnostics')
-
+    video = db.relationship('Video', foreign_keys=[video_id], backref=db.backref('diagnostic', uselist=False))
+    image = db.relationship('Image', foreign_keys=[image_id], backref=db.backref('diagnostic', uselist=False))
+    questionnaire = db.relationship('Questionnaire', foreign_keys=[questionnaire_id], backref=db.backref('diagnostic', uselist=False))
+    result = db.relationship('Result', foreign_keys=[result_id], backref='diagnostic_reference')
 class AuthToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

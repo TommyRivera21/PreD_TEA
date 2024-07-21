@@ -8,14 +8,14 @@ diagnostic_bp = Blueprint('diagnostic', __name__, url_prefix='/diagnostic')
 @jwt_required()
 def create_diagnostic():
     try:
-        users_id = get_jwt_identity()
+        user_id = get_jwt_identity()
         data = request.get_json()
         scan_type = data.get('scanType')
         if not scan_type:
             return jsonify({"error": "Scan type is required"}), 400
         
-        diagnostic = DiagnosticService.create_diagnostic(users_id, scan_type)
-        return jsonify({"id": diagnostic.id}), 201
+        diagnostic = DiagnosticService.create_diagnostic(user_id, scan_type)
+        return jsonify({"id": diagnostic.id, "diagnostic_type": diagnostic.diagnostic_type}), 201
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
     except Exception as e:
