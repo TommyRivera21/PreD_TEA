@@ -49,7 +49,7 @@ class Result(db.Model):
     questionnaire_id = db.Column(db.Integer, db.ForeignKey('questionnaire.id'), nullable=False)
     autism_score = db.Column(db.Numeric(5, 2), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    diagnostic = db.relationship('Diagnostic', backref='result_reference', uselist=False)
+    diagnostic_reference = db.relationship('Diagnostic', back_populates='result_reference', uselist=False)
 
 class Diagnostic(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +65,7 @@ class Diagnostic(db.Model):
     video = db.relationship('Video', foreign_keys=[video_id], backref=db.backref('diagnostic', uselist=False))
     image = db.relationship('Image', foreign_keys=[image_id], backref=db.backref('diagnostic', uselist=False))
     questionnaire = db.relationship('Questionnaire', foreign_keys=[questionnaire_id], backref=db.backref('diagnostic', uselist=False))
-    result = db.relationship('Result', foreign_keys=[result_id], backref='diagnostic_reference')
+    result_reference = db.relationship('Result', back_populates='diagnostic_reference', uselist=False)
 class AuthToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

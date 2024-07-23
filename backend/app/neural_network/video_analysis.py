@@ -1,14 +1,12 @@
+import os
 import cv2
 import numpy as np
-import os
 import h5py
 from tensorflow import keras
+from app.config import Config
 
-# Obtener la ruta absoluta del directorio actual
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Ir dos directorios hacia arriba para llegar a la raíz del proyecto
-base_dir = os.path.dirname(os.path.dirname(current_dir))
-model_path = os.path.join(base_dir, 'models', 'video_model.h5')
+# Actualiza la ruta del modelo para que apunte al directorio correcto
+model_path = os.path.join(Config.MODEL_DIR, 'video_model.h5')
 
 # Verificar la existencia y el tamaño del archivo
 if os.path.exists(model_path):
@@ -30,7 +28,6 @@ try:
     print("Modelo de video cargado exitosamente")
 except Exception as e:
     print(f"Error al cargar el modelo de video: {e}")
-    # Aquí puedes agregar lógica adicional, como cargar un modelo de respaldo
     video_model = None
 
 def preprocess_video(video_path):
@@ -44,7 +41,7 @@ def preprocess_video(video_path):
             ret, frame = cap.read()
             if not ret:
                 break
-            frame = cv2.resize(frame, (224, 224))
+            frame = cv2.resize(frame, (64, 64))  # Ajusta el tamaño de los frames aquí
             frame = frame / 255.0
             frames.append(frame)
         cap.release()
@@ -67,16 +64,16 @@ def analyze_video(video_path):
         return None
 
     try:
-        processed_video = np.expand_dims(processed_video, axis=0)  # Ajustar la forma para el modelo
+        processed_video = np.expand_dims(processed_video, axis=0)
         prediction = video_model.predict(processed_video)
-        return prediction[0][0]  # Asumiendo que el modelo devuelve una predicción de un solo valor
+        return prediction[0][0]
     except Exception as e:
         print(f"Error al realizar la predicción del video: {e}")
         return None
 
 # Ejemplo de uso
 if __name__ == "__main__":
-    test_video_path = os.path.join(base_dir, 'path', 'to', 'test_video.mp4')
+    test_video_path = os.path.join('uploads', 'videos', 'test_video.mp4')  # Ajusta la ruta del test_video aquí
     result = analyze_video(test_video_path)
     if result is not None:
         print(f"Resultado del análisis del video: {result}")

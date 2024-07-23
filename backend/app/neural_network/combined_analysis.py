@@ -1,20 +1,33 @@
-from .image_analysis import analyze_image
-from .video_analysis import analyze_video
-from .questionnaire_analysis import analyze_questionnaire
+from app.neural_network.image_analysis import analyze_image
+from app.neural_network.video_analysis import analyze_video
+from app.neural_network.questionnaire_analysis import analyze_questionnaire
 
-def combined_analysis(image_path=None, video_path=None, questionnaire_answers=None):
-    image_score = 0
-    video_score = 0
-    questionnaire_score = 0
-
+def combined_analysis(image_path=None, video_path=None, qa_pairs=None):
+    results = {}
+    
     if image_path:
-        image_score = analyze_image(image_path)
-    if video_path:
-        video_score = analyze_video(video_path)
-    if questionnaire_answers:
-        questionnaire_score = analyze_questionnaire(questionnaire_answers)
+        image_result = analyze_image(image_path)
+        results['image_analysis'] = image_result
 
-    # Combina los puntajes de alguna manera para obtener el puntaje final
-    # Esta es una implementación simple, puedes ajustar el peso de cada componente
-    final_score = (image_score + video_score + questionnaire_score) / 3
-    return final_score
+    if video_path:
+        video_result = analyze_video(video_path)
+        results['video_analysis'] = video_result
+
+    if qa_pairs:
+        questionnaire_result = analyze_questionnaire(qa_pairs)
+        results['questionnaire_analysis'] = questionnaire_result
+
+    # Lógica para combinar los resultados de las diferentes fuentes
+    combined_result = combine_results(results)
+    return combined_result
+
+def combine_results(results):
+    valid_results = [value for value in results.values() if value is not None]
+    
+    if not valid_results:
+        raise ValueError("No valid results to combine")
+
+    combined_result = {
+        'combined_autism_probability': sum(valid_results) / len(valid_results)
+    }
+    return combined_result

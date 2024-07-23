@@ -9,3 +9,9 @@ class Config:
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     UPLOADED_PHOTOS_DEST = os.getenv('UPLOADED_PHOTOS_DEST')
     UPLOADED_VIDEOS_DEST = os.getenv('UPLOADED_VIDEOS_DEST')
+    MODEL_DIR = os.getenv('MODEL_PATH')
+    
+# Verificar las rutas de destino
+print(f"Ruta para fotos: {Config.UPLOADED_PHOTOS_DEST}")
+print(f"Ruta para videos: {Config.UPLOADED_VIDEOS_DEST}")
+print(f"Ruta para modelos: {Config.MODEL_DIR}")

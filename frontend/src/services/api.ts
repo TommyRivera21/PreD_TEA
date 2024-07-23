@@ -18,6 +18,11 @@ interface QuestionnaireResponse {
   questionnaire_id: number;
 }
 
+// Interface para la respuesta de los resultados
+interface ResultsResponse {
+  combined_autism_probability: number;
+}
+
 const handleApiError = (error: unknown): never => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
@@ -197,6 +202,37 @@ export const submitQuestionnaire = async (
           "Questionnaire submitted successfully after token refresh:",
           response.data
         );
+        return response.data;
+      }
+      throw error;
+    }
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+export const getResults = async (diagnosticId: number): Promise<ResultsResponse> => {
+  try {
+    const token = getCurrentToken();
+    if (!token) throw new Error("No authentication token found");
+
+    const makeRequest = async (authToken: string) => {
+      return axios.get<ResultsResponse>(`${API_URL}/results/${diagnosticId}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+    };
+
+    try {
+      const response: AxiosResponse<ResultsResponse> = await makeRequest(token);
+      console.log("Results fetched successfully:", response.data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        const newToken = await refreshToken();
+        const response: AxiosResponse<ResultsResponse> = await makeRequest(newToken);
+        console.log("Results fetched successfully after token refresh:", response.data);
         return response.data;
       }
       throw error;

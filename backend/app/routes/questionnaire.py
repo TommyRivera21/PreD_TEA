@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import Diagnostic
 from app.services.questionnaireService import QuestionnaireService
+from app.services.neural_network_service import analyze_image_and_questionnaire, analyze_video_and_questionnaire
 
 questionnaire_bp = Blueprint('questionnaire', __name__, url_prefix='/questionnaire')
 
@@ -26,7 +27,19 @@ def submit_questionnaire():
         if not diagnostic:
             return jsonify({"error": "Invalid diagnostic ID"}), 400
         
+        # Guardar el cuestionario
         new_questionnaire = QuestionnaireService.submit_questionnaire(current_user_id, qa_pairs, diagnostic_id)
+        
+        # Obtener rutas de las imágenes y videos asociadas al diagnóstico
+        diagnostic_images = diagnostic.image if diagnostic.image else []  # Usa una lista vacía si no hay imágenes
+        diagnostic_videos = diagnostic.video if diagnostic.video else []  # Usa una lista vacía si no hay videos
+        
+        # Realizar análisis de imágenes y videos junto con el cuestionario
+        for image in diagnostic_images:
+            analyze_image_and_questionnaire(image.image_path, qa_pairs)
+        
+        for video in diagnostic_videos:
+            analyze_video_and_questionnaire(video.video_path, qa_pairs)
         
         return jsonify({
             "message": "Questionnaire submitted successfully",

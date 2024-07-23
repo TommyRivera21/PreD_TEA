@@ -4,10 +4,15 @@ import styles from "../styles/Results.module.css";
 const Results: React.FC = () => {
   return (
     <div className={styles.results}>
-      <h1>Resultados</h1>
-      <p>El porcentaje estimado de TEA es: {/* Mostrar resultado aquí */}</p>
+      <h1 className={styles.titleResults}>Resultados</h1>
+  
+      <p>El porcentaje estimado de TEA es: 75%</p>
       <p>Información sobre hospitales:</p>
-      {/* Mostrar lista de hospitales aquí */}
+      <ul>
+        <li>Hospital A</li>
+        <li>Hospital B</li>
+        <li>Hospital C</li>
+      </ul>
     </div>
   );
 };
