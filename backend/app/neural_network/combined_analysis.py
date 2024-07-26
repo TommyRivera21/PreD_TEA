@@ -3,31 +3,37 @@ from app.neural_network.video_analysis import analyze_video
 from app.neural_network.questionnaire_analysis import analyze_questionnaire
 
 def combined_analysis(image_path=None, video_path=None, qa_pairs=None):
-    results = {}
+    results = []
     
     if image_path:
-        image_result = analyze_image(image_path)
-        results['image_analysis'] = image_result
+        try:
+            image_result = analyze_image(image_path)
+            results.append(image_result)
+        except Exception as e:
+            print(f"Error analyzing image: {e}")
 
     if video_path:
-        video_result = analyze_video(video_path)
-        results['video_analysis'] = video_result
+        try:
+            video_result = analyze_video(video_path)
+            results.append(video_result)
+        except Exception as e:
+            print(f"Error analyzing video: {e}")
 
     if qa_pairs:
-        questionnaire_result = analyze_questionnaire(qa_pairs)
-        results['questionnaire_analysis'] = questionnaire_result
+        try:
+            questionnaire_result = analyze_questionnaire(qa_pairs)
+            results.append(questionnaire_result)
+        except Exception as e:
+            print(f"Error analyzing questionnaire: {e}")
 
-    # Lógica para combinar los resultados de las diferentes fuentes
-    combined_result = combine_results(results)
-    return combined_result
-
-def combine_results(results):
-    valid_results = [value for value in results.values() if value is not None]
-    
-    if not valid_results:
+    if not results:
         raise ValueError("No valid results to combine")
 
-    combined_result = {
-        'combined_autism_probability': sum(valid_results) / len(valid_results)
-    }
+    return combine_results(results)
+
+def combine_results(results):
+    if not results:
+        raise ValueError("No valid results to combine")
+
+    combined_result = sum(results) / len(results)
     return combined_result

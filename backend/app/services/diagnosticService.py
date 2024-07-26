@@ -1,4 +1,4 @@
-from app.models import db, Diagnostic, Video, Image, Questionnaire
+from app.models import db, Diagnostic
 
 class DiagnosticService:
     @staticmethod
@@ -24,23 +24,21 @@ class DiagnosticService:
         
         if video_id and diagnostic.diagnostic_type == 'video':
             diagnostic.video_id = video_id
-            video = Video.query.get(video_id)
-            if video:
-                video.diagnostic_id = diagnostic_id
         elif image_id and diagnostic.diagnostic_type == 'image':
             diagnostic.image_id = image_id
-            image = Image.query.get(image_id)
-            if image:
-                image.diagnostic_id = diagnostic_id
         
         if questionnaire_id:
             diagnostic.questionnaire_id = questionnaire_id
-            questionnaire = Questionnaire.query.get(questionnaire_id)
-            if questionnaire:
-                questionnaire.diagnostic_id = diagnostic_id
         
         if result_id:
             diagnostic.result_id = result_id
         
         db.session.commit()
+        return diagnostic
+    
+    @staticmethod
+    def get_diagnostic(diagnostic_id):
+        diagnostic = Diagnostic.query.get(diagnostic_id)
+        if not diagnostic:
+            raise ValueError("Diagnostic not found")
         return diagnostic

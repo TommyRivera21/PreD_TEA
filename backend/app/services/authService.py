@@ -1,6 +1,6 @@
 from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import Users, AuthToken, db
+from app.models import AuthToken, Users, db
 
 def login(email, password):
     user = Users.query.filter_by(email=email).first()

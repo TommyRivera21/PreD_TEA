@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import * as d3 from "d3";
 import styles from "../styles/Results.module.css";
-
+import { getResults } from "../services/api";
 interface Hospital {
   name: string;
   phone: string;
@@ -9,8 +10,10 @@ interface Hospital {
 }
 
 const Results: React.FC = () => {
+  const { diagnosticId } = useParams<{ diagnosticId: string }>();
   const chartRef = useRef<SVGSVGElement>(null);
-  const teaPercentage = 47; 
+  const [teaPercentage, setTeaPercentage] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null); 
 
   const hospitals: Hospital[] = [
     { name: "Hospital A", phone: "123-456-7890", address: "Calle 1, Ciudad" },
@@ -20,10 +23,29 @@ const Results: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (chartRef.current) {
+    const fetchResults = async () => {
+      if (!diagnosticId) {
+        setError("No se encontró el ID del diagnóstico");
+        return;
+      }
+
+      try {
+        const results = await getResults(parseInt(diagnosticId));
+        setTeaPercentage(results.combined_autism_probability);
+      } catch (error) {
+        console.error("Error fetching results:", error);
+        setError("Error al obtener los resultados. Por favor, intente de nuevo más tarde.");
+      }
+    };
+
+    fetchResults();
+  }, [diagnosticId]);
+
+  useEffect(() => {
+    if (chartRef.current && teaPercentage !== null) {
       drawChart();
     }
-  }, []);
+  }, [teaPercentage]);
 
   const drawChart = () => {
     const svg = d3.select(chartRef.current);
@@ -101,6 +123,14 @@ const Results: React.FC = () => {
     g.select(".chartFill")
       .style("filter", "url(#glow)");
   };
+
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
+
+  if (teaPercentage === null) {
+    return <div className={styles.loading}>Cargando resultados...</div>;
+  }
 
   return (
     <div className={styles.scrollContainer}>

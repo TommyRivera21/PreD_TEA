@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.fileService import save_image, save_video
-from app.models import Diagnostic
+from app.models import Diagnostic, Questionnaire
+from app.services.diagnosticService import DiagnosticService
 from app.services.neural_network_service import analyze_image_and_questionnaire, analyze_video_and_questionnaire
 
 upload_bp = Blueprint('upload', __name__, url_prefix='/upload')
@@ -34,14 +35,26 @@ def upload_image():
 
     saved_images = save_image(files, user_id, diagnostic_id)
 
+    # Actualizar el diagnóstico con el ID de la imagen
+    DiagnosticService.update_diagnostic(diagnostic_id, image_id=saved_images[0].id)
+
+    # Obtener las respuestas del cuestionario
+    questionnaire = Questionnaire.query.filter_by(diagnostic_id=diagnostic_id).first()
+    if questionnaire:
+        questionnaire_answers = questionnaire.qa_pairs
+    else:
+        questionnaire_answers = {}
+
     # Ejecutar análisis para cada imagen guardada
     for image in saved_images:
         image_path = image.image_path
-        # Llamar a la función que analiza la imagen y el cuestionario
-        # Asegúrate de que tengas las respuestas del cuestionario disponibles
-        questionnaire_answers = {}  # Deberás obtener las respuestas del cuestionario de alguna manera
-        analyze_image_and_questionnaire(image_path, questionnaire_answers)
-    
+        try:
+            # Llamar a la función que analiza la imagen y el cuestionario
+            result = analyze_image_and_questionnaire(image_path, questionnaire_answers)
+            print(f"Resultado del análisis de la imagen {image.id}: {result}")
+        except Exception as e:
+            print(f"Error analyzing image {image.id}: {e}")
+
     response_data = [{"image_id": image.id, "image_path": image.image_path} for image in saved_images]
     return jsonify(response_data), 201
 
@@ -72,6 +85,9 @@ def upload_video():
         return jsonify({"msg": "No selected file"}), 400
 
     video = save_video(file, user_id, diagnostic_id)
+
+    # Actualizar el diagnostic con el ID del video
+    DiagnosticService.update_diagnostic(diagnostic_id, video_id=video.id)
 
     # Ejecutar análisis para el video guardado
     video_path = video.video_path

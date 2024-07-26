@@ -14,7 +14,7 @@ def login_route():
         return jsonify({
             'token': access_token,
             'refreshToken': refresh_token,
-            'user': user_data['user'].to_dict()  
+            'user': user_data['user'].to_dict()
         }), 200
     return jsonify({'message': 'Invalid credentials'}), 401
 

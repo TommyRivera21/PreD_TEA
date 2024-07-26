@@ -34,10 +34,12 @@ def preprocess_image(image_path):
             raise ValueError(f"No se pudo cargar la imagen: {image_path}")
         image = cv2.resize(image, (128, 128))  # Ajusta el tamaño de la imagen aquí
         image = image / 255.0
-        return np.expand_dims(image, axis=0)
+        processed_image = np.expand_dims(image, axis=0)
+        print(f"Forma de la imagen procesada: {processed_image.shape}")  # Registro para verificar la forma
+        return processed_image
     except Exception as e:
         raise RuntimeError(f"Error en el preprocesamiento de la imagen: {e}")
-
+    
 def analyze_image(image_path):
     if image_model is None:
         raise RuntimeError("El modelo no se cargó correctamente. No se puede realizar el análisis.")
@@ -48,10 +50,11 @@ def analyze_image(image_path):
 
     try:
         prediction = image_model.predict(processed_image)
+        print(f"Predicción cruda: {prediction}")  # Registro para verificar la salida
         return prediction[0][0]
     except Exception as e:
         raise RuntimeError(f"Error al realizar la predicción: {e}")
-
+    
 # Ejemplo de uso
 if __name__ == "__main__":
     test_image_path = os.path.join('uploads', 'images', 'test_image.jpg')  # Ajusta la ruta del test_image aquí

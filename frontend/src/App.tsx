@@ -74,7 +74,7 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path={RESULTS_ROUTE}
+              path={`${RESULTS_ROUTE}/:diagnosticId`}
               element={
                 <PrivateRoute>
                   <Results />

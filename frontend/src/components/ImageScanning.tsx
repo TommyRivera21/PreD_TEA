@@ -36,8 +36,6 @@ const ImageScanning: React.FC = () => {
     }
   };
 
-  console.log('Diagnostic ID received:', diagnosticId);
-
   return (
     <div className={styles.imageScanning}>
       <h1 className={styles.titleDiagnostic}>Diagnóstico por imágenes</h1>

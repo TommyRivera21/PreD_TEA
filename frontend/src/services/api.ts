@@ -3,7 +3,6 @@ import { API_URL } from "../constants";
 import { getCurrentToken, refreshToken } from "./authService";
 
 // Interfaces para las respuestas de la API
-
 interface DiagnosticResponse {
   id: number;
   diagnostic_type: "video" | "image";
@@ -20,7 +19,8 @@ interface QuestionnaireResponse {
 
 // Interface para la respuesta de los resultados
 interface ResultsResponse {
-  combined_autism_probability: number;
+  result_id: number;
+  autism_score: number;
 }
 
 const handleApiError = (error: unknown): never => {
@@ -57,21 +57,14 @@ export const createDiagnostic = async (
     };
 
     try {
-      const response: AxiosResponse<DiagnosticResponse> = await makeRequest(
-        token
-      );
+      const response: AxiosResponse<DiagnosticResponse> = await makeRequest(token);
       console.log("Diagnostic created successfully:", response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         const newToken = await refreshToken();
-        const response: AxiosResponse<DiagnosticResponse> = await makeRequest(
-          newToken
-        );
-        console.log(
-          "Diagnostic created successfully after token refresh:",
-          response.data
-        );
+        const response: AxiosResponse<DiagnosticResponse> = await makeRequest(newToken);
+        console.log("Diagnostic created successfully after token refresh:", response.data);
         return response.data;
       }
       throw error;
@@ -107,13 +100,8 @@ export const uploadVideo = async (
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         const newToken = await refreshToken();
-        const response: AxiosResponse<UploadResponse> = await makeRequest(
-          newToken
-        );
-        console.log(
-          "Video uploaded successfully after token refresh:",
-          response.data
-        );
+        const response: AxiosResponse<UploadResponse> = await makeRequest(newToken);
+        console.log("Video uploaded successfully after token refresh:", response.data);
         return response.data;
       }
       throw error;
@@ -148,15 +136,9 @@ export const uploadImages = async (
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        // Token expirado, intentamos refrescar
         const newToken = await refreshToken();
-        const response: AxiosResponse<UploadResponse> = await makeRequest(
-          newToken
-        );
-        console.log(
-          "Images uploaded successfully after token refresh:",
-          response.data
-        );
+        const response: AxiosResponse<UploadResponse> = await makeRequest(newToken);
+        console.log("Images uploaded successfully after token refresh:", response.data);
         return response.data;
       }
       throw error;
@@ -188,20 +170,14 @@ export const submitQuestionnaire = async (
     };
 
     try {
-      const response: AxiosResponse<QuestionnaireResponse> = await makeRequest(
-        token
-      );
+      const response: AxiosResponse<QuestionnaireResponse> = await makeRequest(token);
       console.log("Questionnaire submitted successfully:", response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         const newToken = await refreshToken();
-        const response: AxiosResponse<QuestionnaireResponse> =
-          await makeRequest(newToken);
-        console.log(
-          "Questionnaire submitted successfully after token refresh:",
-          response.data
-        );
+        const response: AxiosResponse<QuestionnaireResponse> = await makeRequest(newToken);
+        console.log("Questionnaire submitted successfully after token refresh:", response.data);
         return response.data;
       }
       throw error;

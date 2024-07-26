@@ -12,7 +12,10 @@ const Questionnaire: React.FC = () => {
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    console.log("Diagnostic ID:", diagnosticId);
+    if (!diagnosticId) {
+      console.error("Diagnostic ID not found.");
+      return;
+    }
   }, [diagnosticId]);
 
   const handleResponseChange = (index: number, value: string) => {
@@ -27,7 +30,6 @@ const Questionnaire: React.FC = () => {
       return;
     }
 
-    // Convertir a número
     const parsedDiagnosticId = parseInt(diagnosticId, 10);
 
     if (responses.some((response) => response === "")) {
@@ -46,6 +48,8 @@ const Questionnaire: React.FC = () => {
       const response = await submitQuestionnaire(parsedDiagnosticId, payload);
       console.log("Formulario enviado:", response);
       setError("");
+
+      window.location.href = `/results/${diagnosticId}`;
     } catch (error) {
       console.error("Error al enviar el cuestionario:", error);
       setError(
@@ -53,8 +57,6 @@ const Questionnaire: React.FC = () => {
       );
     }
   };
-
-  console.log("Diagnostic ID received:", diagnosticId);
 
   if (!diagnosticId) {
     return <div>Error: Diagnostic ID not found.</div>;

@@ -49,7 +49,10 @@ def preprocess_video(video_path):
         if len(frames) == 0:
             raise ValueError("No se pudieron extraer frames del video")
         
-        return np.array(frames)
+        frames_array = np.array(frames)
+        frames_flattened = frames_array.reshape((frames_array.shape[0], -1))  # Aplanar frames
+        
+        return frames_flattened
     except Exception as e:
         print(f"Error en el preprocesamiento del video: {e}")
         return None
