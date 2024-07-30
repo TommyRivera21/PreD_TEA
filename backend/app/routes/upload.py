@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import numpy as np
 from app.services.fileService import save_image, save_video
-from app.models import Diagnostic, Questionnaire
-from app.services.diagnosticService import DiagnosticService
-from app.services.neural_network_service import analyze_image_and_questionnaire, analyze_video_and_questionnaire
+from app.models import Diagnostic, db
+from app.services.neural_network_service import image_analysis_service, video_analysis_service
 
 upload_bp = Blueprint('upload', __name__, url_prefix='/upload')
 
@@ -35,29 +35,21 @@ def upload_image():
 
     saved_images = save_image(files, user_id, diagnostic_id)
 
-    # Actualizar el diagnóstico con el ID de la imagen
-    DiagnosticService.update_diagnostic(diagnostic_id, image_id=saved_images[0].id)
-
-    # Obtener las respuestas del cuestionario
-    questionnaire = Questionnaire.query.filter_by(diagnostic_id=diagnostic_id).first()
-    if questionnaire:
-        questionnaire_answers = questionnaire.qa_pairs
-    else:
-        questionnaire_answers = {}
-
     # Ejecutar análisis para cada imagen guardada
+    results = []
     for image in saved_images:
         image_path = image.image_path
         try:
-            # Llamar a la función que analiza la imagen y el cuestionario
-            result = analyze_image_and_questionnaire(image_path, questionnaire_answers)
-            print(f"Resultado del análisis de la imagen {image.id}: {result}")
+            # Ejecutar análisis solo después de guardar la imagen
+            result = image_analysis_service(image.id, image_path)
+            # Actualizar el registro de la imagen con la puntuación de predicción
+            image.image_prediction_score = result['prediction_score']
+            db.session.commit()
+            results.append({"image_id": image.id, "image_path": image.image_path, "result": result})
         except Exception as e:
             print(f"Error analyzing image {image.id}: {e}")
 
-    response_data = [{"image_id": image.id, "image_path": image.image_path} for image in saved_images]
-    return jsonify(response_data), 201
-
+    return jsonify(results), 201
 
 @upload_bp.route('/video', methods=['POST'])
 @jwt_required()
@@ -86,15 +78,14 @@ def upload_video():
 
     video = save_video(file, user_id, diagnostic_id)
 
-    # Actualizar el diagnostic con el ID del video
-    DiagnosticService.update_diagnostic(diagnostic_id, video_id=video.id)
-
     # Ejecutar análisis para el video guardado
     video_path = video.video_path
-    # Llamar a la función que analiza el video y el cuestionario
-    # Asegúrate de que tengas las respuestas del cuestionario disponibles
-    questionnaire_answers = {}  # Deberás obtener las respuestas del cuestionario de alguna manera
-    analyze_video_and_questionnaire(video_path, questionnaire_answers)
-
-    response_data = {"video_id": video.id, "video_path": video.video_path}
-    return jsonify(response_data), 201
+    try:
+        result = video_analysis_service(video.id, video_path)
+        # Actualizar el registro del video con la puntuación de predicción
+        video.video_prediction_score = result['prediction_score']
+        db.session.commit()
+        return jsonify({"video_id": video.id, "video_path": video.video_path, "result": result}), 201
+    except Exception as e:
+        print(f"Error analyzing video {video.id}: {e}")
+        return jsonify({"error": str(e)}), 500

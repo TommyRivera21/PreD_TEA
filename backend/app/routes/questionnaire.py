@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.questionnaireService import QuestionnaireService
-from app.services.diagnosticService import DiagnosticService
+from app.services.neural_network_service import questionnaire_analysis_service
 
 questionnaire_bp = Blueprint('questionnaire', __name__, url_prefix='/questionnaire')
 
@@ -15,14 +15,24 @@ def submit_questionnaire():
     qa_pairs = data.get('qa_pairs')
     
     if not diagnostic_id or not qa_pairs:
-        return jsonify({"error": "Missing diagnostic_id or qa_pairs"}), 400
+        return jsonify({"error": "Faltan diagnostic_id o qa_pairs"}), 400
     
     try:
-        questionnaire = QuestionnaireService.submit_questionnaire(user_id, qa_pairs, diagnostic_id)
+        # Guardar el cuestionario
+        questionnaire_id = QuestionnaireService.submit_questionnaire(user_id, qa_pairs, diagnostic_id)
         
-        # Actualizar el diagnóstico con el ID del cuestionario
-        DiagnosticService.update_diagnostic(diagnostic_id, questionnaire_id=questionnaire.id)
+        # Analizar el cuestionario
+        questionnaire_analysis_result = questionnaire_analysis_service(questionnaire_id, qa_pairs)
         
-        return jsonify({"message": "Questionnaire submitted successfully", "questionnaire_id": questionnaire.id}), 201
+        # Actualizar el cuestionario con el resultado del análisis
+        QuestionnaireService.update_questionnaire_score(questionnaire_id, questionnaire_analysis_result['prediction_score'])
+
+        return jsonify({
+            "message": "Cuestionario enviado con éxito",
+            "diagnostic_id": diagnostic_id,
+            "questionnaire_id": questionnaire_id,
+            "analysis_result": questionnaire_analysis_result['prediction_score']
+        }), 201
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500

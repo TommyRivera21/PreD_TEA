@@ -27,7 +27,7 @@ try:
 except Exception as e:
     raise RuntimeError(f"Error al cargar el modelo: {e}")
 
-def preprocess_image(image_path):
+def image_preprocessing_neural_network(image_path):
     try:
         image = cv2.imread(image_path)
         if image is None:
@@ -40,11 +40,11 @@ def preprocess_image(image_path):
     except Exception as e:
         raise RuntimeError(f"Error en el preprocesamiento de la imagen: {e}")
     
-def analyze_image(image_path):
+def image_analysis_neural_network(image_path):
     if image_model is None:
         raise RuntimeError("El modelo no se cargó correctamente. No se puede realizar el análisis.")
 
-    processed_image = preprocess_image(image_path)
+    processed_image = image_preprocessing_neural_network(image_path)
     if processed_image is None:
         raise RuntimeError("Error en el preprocesamiento de la imagen.")
 
@@ -54,13 +54,3 @@ def analyze_image(image_path):
         return prediction[0][0]
     except Exception as e:
         raise RuntimeError(f"Error al realizar la predicción: {e}")
-    
-# Ejemplo de uso
-if __name__ == "__main__":
-    test_image_path = os.path.join('uploads', 'images', 'test_image.jpg')  # Ajusta la ruta del test_image aquí
-    try:
-        result = analyze_image(test_image_path)
-        if result is not None:
-            print(f"Resultado del análisis: {result}")
-    except Exception as e:
-        print(f"Error en el análisis: {e}")

@@ -1,14 +1,13 @@
 import os
 import cv2
 import numpy as np
-import h5py
 from tensorflow import keras
 from app.config import Config
 
-# Actualiza la ruta del modelo para que apunte al directorio correcto
+# Ruta del modelo
 model_path = os.path.join(Config.MODEL_DIR, 'video_model.h5')
 
-# Verificar la existencia y el tamaño del archivo
+# Verificar existencia y tamaño del archivo
 if os.path.exists(model_path):
     print(f"El archivo existe y su tamaño es: {os.path.getsize(model_path)} bytes")
 else:
@@ -16,26 +15,21 @@ else:
 
 # Intentar abrir el archivo manualmente
 try:
-    with h5py.File(model_path, 'r') as f:
+    with open(model_path, 'rb') as f:
         print("Archivo abierto correctamente")
-        print("Claves en el archivo:", list(f.keys()))
 except Exception as e:
     print(f"Error al abrir el archivo: {e}")
 
 # Cargar el modelo de análisis de videos
 try:
     video_model = keras.models.load_model(model_path)
-    print("Modelo de video cargado exitosamente")
+    print("Modelo cargado exitosamente")
 except Exception as e:
-    print(f"Error al cargar el modelo de video: {e}")
-    video_model = None
+    raise RuntimeError(f"Error al cargar el modelo: {e}")
 
-def preprocess_video(video_path):
+def video_preprocessing_neural_network(video_path):
     try:
         cap = cv2.VideoCapture(video_path)
-        if not cap.isOpened():
-            raise ValueError(f"No se pudo abrir el video: {video_path}")
-        
         frames = []
         while True:
             ret, frame = cap.read()
@@ -45,38 +39,30 @@ def preprocess_video(video_path):
             frame = frame / 255.0
             frames.append(frame)
         cap.release()
+        frames = np.array(frames)
         
-        if len(frames) == 0:
-            raise ValueError("No se pudieron extraer frames del video")
+        # Aplanar cada frame de (64, 64, 3) a (12288)
+        frames = frames.reshape(frames.shape[0], 64*64*3)
         
-        frames_array = np.array(frames)
-        frames_flattened = frames_array.reshape((frames_array.shape[0], -1))  # Aplanar frames
+        # Agregar una dimensión adicional para el batch
+        frames = np.expand_dims(frames, axis=0)
         
-        return frames_flattened
+        print(f"Forma de los frames procesados: {frames.shape}")  # Registro para verificar la forma
+        return frames
     except Exception as e:
-        print(f"Error en el preprocesamiento del video: {e}")
-        return None
+        raise RuntimeError(f"Error en el preprocesamiento del video: {e}")
 
-def analyze_video(video_path):
+def video_analysis_neural_network(video_path):
     if video_model is None:
-        print("El modelo de video no se cargó correctamente. No se puede realizar el análisis.")
-        return None
+        raise RuntimeError("El modelo no se cargó correctamente. No se puede realizar el análisis.")
 
-    processed_video = preprocess_video(video_path)
+    processed_video = video_preprocessing_neural_network(video_path)
     if processed_video is None:
-        return None
+        raise RuntimeError("Error en el preprocesamiento del video.")
 
     try:
-        processed_video = np.expand_dims(processed_video, axis=0)
         prediction = video_model.predict(processed_video)
+        print(f"Predicción cruda: {prediction}")  # Registro para verificar la salida
         return prediction[0][0]
     except Exception as e:
-        print(f"Error al realizar la predicción del video: {e}")
-        return None
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    test_video_path = os.path.join('uploads', 'videos', 'test_video.mp4')  # Ajusta la ruta del test_video aquí
-    result = analyze_video(test_video_path)
-    if result is not None:
-        print(f"Resultado del análisis del video: {result}")
+        raise RuntimeError(f"Error al realizar la predicción: {e}")

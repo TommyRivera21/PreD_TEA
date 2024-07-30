@@ -23,6 +23,12 @@ export const questions = [
   "¿Su hijo(a) inicia la interacción con compañeros o adultos (por ejemplo, iniciar una conversación, pedir jugar)?",
   "¿Su hijo(a) se altera extremadamente por cambios menores o transiciones (por ejemplo, cambiar una rutina, ir a un lugar nuevo)?",
   "¿Su hijo(a) tiene intereses intensos y enfocados que son inusuales en intensidad o enfoque (por ejemplo, un interés intenso en un tema u objeto específico)?",
+  "¿Su hijo(a) mira fijamente a un objeto o a un punto fijo sin un propósito aparente?",
+  "¿Su hijo(a) utiliza frases cotidianas para comunicarse, como hola o adiós?",
+  "¿Su hijo(a) usa su mirada para seguir la dirección en la que usted está mirando?",
+  "¿Su hijo(a) mira hacia usted cuando dice su nombre?",
+  "¿Su hijo(a) muestra interés en compartir experiencias con usted, por ejemplo, señalando un lugar que le llama la atención?",
+  "¿Su hijo(a) muestra signos de consuelo, como acariciar o abrazar a alguien cuando está visiblemente molesto?",
 ];
 
-export const answers = ["Rara vez", "Nunca", "Frecuentemente", "Siempre"];
+export const answers = ["Siempre", "Generalmente", "A veces", "Rara vez", "Nunca"];

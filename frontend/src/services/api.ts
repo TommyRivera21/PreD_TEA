@@ -160,6 +160,8 @@ export const submitQuestionnaire = async (
       qa_pairs: responses,
       diagnostic_id: diagnosticId,
     };
+    
+    console.log("Request data:", requestData);
 
     const makeRequest = async (authToken: string) => {
       return axios.post(`${API_URL}/questionnaire/submit`, requestData, {

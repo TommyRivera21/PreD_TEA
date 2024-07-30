@@ -17,24 +17,15 @@ class DiagnosticService:
         return new_diagnostic
 
     @staticmethod
-    def update_diagnostic(diagnostic_id, video_id=None, image_id=None, questionnaire_id=None, result_id=None):
+    def update_diagnostic(diagnostic_id, **kwargs):
         diagnostic = Diagnostic.query.get(diagnostic_id)
-        if not diagnostic:
+        if diagnostic:
+            for key, value in kwargs.items():
+                if hasattr(diagnostic, key):
+                    setattr(diagnostic, key, value)
+            db.session.commit()
+        else:
             raise ValueError("Diagnostic not found")
-        
-        if video_id and diagnostic.diagnostic_type == 'video':
-            diagnostic.video_id = video_id
-        elif image_id and diagnostic.diagnostic_type == 'image':
-            diagnostic.image_id = image_id
-        
-        if questionnaire_id:
-            diagnostic.questionnaire_id = questionnaire_id
-        
-        if result_id:
-            diagnostic.result_id = result_id
-        
-        db.session.commit()
-        return diagnostic
     
     @staticmethod
     def get_diagnostic(diagnostic_id):

@@ -3,11 +3,10 @@ import os
 import tensorflow as tf
 from tensorflow.keras.models import Sequential  # type: ignore
 from tensorflow.keras.layers import Dense  # type: ignore
+from app.config import Config
 
 # Añadir el directorio raíz al PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-
-from app.config import Config
 
 def create_questionnaire_model(num_questions):
     model = Sequential([
@@ -20,7 +19,7 @@ def create_questionnaire_model(num_questions):
     return model
 
 # Define the number of questions in the questionnaire
-num_questions = 20  # Asegúrate de que este número coincide con el número de preguntas en tu cuestionario
+num_questions = 30  # Asegúrate de que este número coincide con el número de preguntas en tu cuestionario
 
 if __name__ == "__main__":
     questionnaire_model = create_questionnaire_model(num_questions)

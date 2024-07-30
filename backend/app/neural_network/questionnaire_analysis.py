@@ -1,66 +1,42 @@
-import os
 import numpy as np
-import h5py
-from tensorflow import keras
+from tensorflow.keras.models import load_model  # type: ignore
 from app.config import Config
+import os
 
 model_path = os.path.join(Config.MODEL_DIR, 'questionnaire_model.h5')
+questionnaire_model = load_model(model_path)
 
-# Verificar la existencia y el tamaño del archivo
-if os.path.exists(model_path):
-    print(f"El archivo existe y su tamaño es: {os.path.getsize(model_path)} bytes")
-else:
-    print(f"El archivo no existe en la ruta: {model_path}")
-
-# Intentar abrir el archivo manualmente
-try:
-    with h5py.File(model_path, 'r') as f:
-        print("Archivo abierto correctamente")
-        print("Claves en el archivo:", list(f.keys()))
-except Exception as e:
-    print(f"Error al abrir el archivo: {e}")
-
-# Cargar el modelo de análisis de cuestionarios
-try:
-    questionnaire_model = keras.models.load_model(model_path)
-    print("Modelo de cuestionario cargado exitosamente")
-except Exception as e:
-    print(f"Error al cargar el modelo de cuestionario: {e}")
-    questionnaire_model = None
-
-def preprocess_answers(answers):
+def answers_preprocessing_neural_network(answers):
     try:
-        answers_array = np.array(list(answers.values()))
-        if not np.issubdtype(answers_array.dtype, np.number):
-            raise ValueError("Todas las respuestas deben ser numéricas")
-        return answers_array.reshape(1, -1)
+        # Verificar que `answers` sea una lista de strings
+        if not isinstance(answers, list) or not all(isinstance(answer, str) for answer in answers):
+            raise ValueError("answers debe ser una lista de strings")
+
+        if len(answers) != 30:
+            raise ValueError(f"Se esperaban 30 respuestas, pero se recibieron {len(answers)}")
+
+        # Crear un array de respuestas preprocesadas
+        answers_array = []
+        for value in answers:
+            if value not in ['Siempre', 'Generalmente', 'A veces', 'Rara vez', 'Nunca']:
+                raise ValueError(f"Respuesta no válida: {value}")
+            answers_array.append({'Siempre': 1.0, 'Generalmente': 0.75, 'A veces': 0.50, 'Rara vez': 0.25, 'Nunca': 0.0}[value])
+
+        return np.array(answers_array)
     except Exception as e:
         print(f"Error en el preprocesamiento de las respuestas: {e}")
         return None
 
-def analyze_questionnaire(answers):
+def questionnaire_analysis_neural_network(preprocessed_answers):
     if questionnaire_model is None:
         print("El modelo de cuestionario no se cargó correctamente. No se puede realizar el análisis.")
         return None
 
-    processed_answers = preprocess_answers(answers)
-    if processed_answers is None:
-        return None
-
     try:
-        prediction = questionnaire_model.predict(processed_answers)
-        return {'autism_probability': float(prediction[0][0])}
+        # Asegurarse de que la entrada tenga la forma correcta
+        preprocessed_answers = preprocessed_answers.reshape(1, -1)
+        prediction = questionnaire_model.predict(preprocessed_answers)
+        return float(prediction[0][0])
     except Exception as e:
         print(f"Error al realizar la predicción del cuestionario: {e}")
         return None
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    sample_answers = {
-        'pregunta1': 3,
-        'pregunta2': 2,
-        'pregunta3': 4,
-    }
-    result = analyze_questionnaire(sample_answers)
-    if result is not None:
-        print(f"Resultado del análisis del cuestionario: {result}")

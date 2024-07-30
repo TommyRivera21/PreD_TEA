@@ -16,7 +16,6 @@ const Header: React.FC = () => {
         {isAuthenticated ? (
           <>
             <Link to="/scan">Diagnostico</Link>
-            <Link to="/results">Resultados</Link>
             <button onClick={logout} className={styles.btnLogout}>Cerrar sesion</button>
           </>
         ) : (

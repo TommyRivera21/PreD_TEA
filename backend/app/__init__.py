@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+import logging
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,6 +18,9 @@ def create_app():
     JWTManager(app)
 
     CORS(app)
+
+    # Configurar el logging
+    logging.basicConfig(level=logging.INFO)
     
     from .routes.auth import auth_bp
     from .routes.diagnostic import diagnostic_bp
