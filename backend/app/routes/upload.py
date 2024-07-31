@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 import numpy as np
 from app.services.fileService import save_image, save_video
 from app.models import Diagnostic, db
-from app.services.neural_network_service import image_analysis_service, video_analysis_service
+from app.services.neural_network_service import image_analysis_service, calculate_average_score, video_analysis_service
+from app.services.resultService import insert_files_score_result
 
 upload_bp = Blueprint('upload', __name__, url_prefix='/upload')
 
@@ -29,7 +30,6 @@ def upload_image():
         return jsonify({"msg": "No image part"}), 400
 
     files = request.files.getlist('image')
-
     if len(files) == 0:
         return jsonify({"msg": "No files selected"}), 400
 
@@ -48,6 +48,10 @@ def upload_image():
             results.append({"image_id": image.id, "image_path": image.image_path, "result": result})
         except Exception as e:
             print(f"Error analyzing image {image.id}: {e}")
+
+    # Calcular el promedio de las predicciones y actualizar el campo `files_score`
+    average_score = calculate_average_score(diagnostic_id)
+    insert_files_score_result(diagnostic_id, user_id, average_score)
 
     return jsonify(results), 201
 

@@ -1,9 +1,9 @@
 from .authService import login, register, logout, getCurrentToken, getCurrentUser
 from .fileService import save_image, save_video
 from .questionnaireService import QuestionnaireService
-from .resultService import create_result, update_diagnostic_with_results, get_results_by_user
+from .resultService import create_result, insert_files_score_result, update_diagnostic_with_results, get_results_by_user
 from .diagnosticService import DiagnosticService
-from .neural_network_service import image_analysis_service, video_analysis_service, questionnaire_analysis_service
+from .neural_network_service import image_analysis_service, calculate_average_score, video_analysis_service, questionnaire_analysis_service
 
 __all__ = [
     'login',
@@ -16,9 +16,11 @@ __all__ = [
     'QuestionnaireService',
     'create_result',
     'update_diagnostic_with_results',
+    'insert_files_score_result',
     'get_results_by_user',
     'DiagnosticService',
     'image_analysis_service',
+    'calculate_average_score',
     'video_analysis_service',
     'questionnaire_analysis_service'
 ]

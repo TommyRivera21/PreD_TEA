@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 def image_analysis_service(image_id, image_path):
     try:
+        # Ejecutar análisis de imagen
         autism_score = image_analysis_neural_network(image_path)
         logger.info(f"Análisis de imagen: {image_path} - Score: {autism_score}")
         
@@ -28,8 +29,28 @@ def image_analysis_service(image_id, image_path):
         
         return {"prediction_score": autism_score}
     except Exception as e:
-        logger.error(f"Error analyzing image: {e}")
-        raise RuntimeError(f"Error analyzing image: {e}")
+        logger.error(f"Error analyzing image {image_id}: {e}")
+        raise RuntimeError(f"Error analyzing image {image_id}: {e}")
+
+def calculate_average_score(diagnostic_id):
+    try:
+        images = Image.query.filter_by(diagnostic_id=diagnostic_id).all()
+        if not images:
+            logger.warning(f"No se encontraron imágenes para el diagnóstico ID {diagnostic_id}")
+            return 0.0
+
+        scores = [image.image_prediction_score for image in images if image.image_prediction_score is not None]
+        if not scores:
+            logger.warning(f"No se encontraron puntuaciones válidas para el diagnóstico ID {diagnostic_id}")
+            return 0.0
+
+        average_score = np.mean(scores)
+        
+        logger.info(f"Promedio de las predicciones para el diagnóstico ID {diagnostic_id}: {average_score:.2f}")
+        return average_score
+    except Exception as e:
+        logger.error(f"Error calculating average score for diagnostic ID {diagnostic_id}: {e}")
+        raise RuntimeError(f"Error calculating average score for diagnostic ID {diagnostic_id}: {e}")
 
 def video_analysis_service(video_id, video_path):
     try:

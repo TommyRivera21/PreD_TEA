@@ -51,7 +51,7 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     diagnostic_id = db.Column(db.Integer, ForeignKey('diagnostic.id'), nullable=False)
-    image_prediction_score = db.Column(db.Float, nullable=False)
+    image_prediction_score = db.Column(db.Float, nullable=True)
     image_path = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     
@@ -74,7 +74,7 @@ class Result(db.Model):
     user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     diagnostic_id = db.Column(db.Integer, ForeignKey('diagnostic.id'), nullable=False)
     files_score = db.Column(db.Float, nullable=False)
-    questionnaire_score = db.Column(db.Float, nullable=False)
+    questionnaire_score = db.Column(db.Float, nullable=True)
     autism_score = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 

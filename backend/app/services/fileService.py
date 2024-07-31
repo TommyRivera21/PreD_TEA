@@ -5,30 +5,28 @@ from app import db
 from flask import current_app
 
 def save_image(files, user_id, diagnostic_id):
-    try:
-        base_path = os.path.join(current_app.config['UPLOADED_PHOTOS_DEST'], str(user_id), str(diagnostic_id))
-        os.makedirs(base_path, exist_ok=True)
-    except OSError as e:
-        print(f"Error creating directories: {e}")
-        raise
-
     saved_images = []
-
-    for uploaded_file in files:
-        filename = secure_filename(uploaded_file.filename)
-        file_path = os.path.join(base_path, filename)
-        try:
-            uploaded_file.save(file_path)
-        except Exception as e:
-            print(f"Error saving file {filename}: {e}")
-            continue
+    
+    user_id_str = str(user_id)
+    diagnostic_id_str = str(diagnostic_id)
+    
+    base_path = os.path.join(current_app.config['UPLOADED_PHOTOS_DEST'], user_id_str, diagnostic_id_str)
+    os.makedirs(base_path, exist_ok=True)
+    
+    for file in files:
+        file_path = os.path.join(base_path, file.filename)
+        file.save(file_path)
         
-        image = Image(user_id=user_id, image_path=file_path, diagnostic_id=diagnostic_id, image_prediction_score=0.0)
+        # Aquí puedes calcular el `image_prediction_score` si tienes la lógica
+        # Si no, puedes establecerlo en None o en un valor predeterminado si tu modelo lo permite
+        image_prediction_score = None
+        
+        # Crear y guardar el registro en la base de datos
+        image = Image(user_id=user_id, diagnostic_id=diagnostic_id, image_path=file_path, image_prediction_score=image_prediction_score)
         db.session.add(image)
         db.session.commit()
-
         saved_images.append(image)
-
+    
     return saved_images
 
 def save_video(file, user_id, diagnostic_id):
