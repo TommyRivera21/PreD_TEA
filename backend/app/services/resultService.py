@@ -74,6 +74,16 @@ def get_results_by_user(user_id):
     except Exception as e:
         raise RuntimeError(f"Error retrieving results: {e}")
 
+def get_autism_score(diagnostic_id):
+    try:
+        result = Result.query.filter_by(diagnostic_id=diagnostic_id).first()
+        if result:
+            return result.autism_score
+        else:
+            return None
+    except Exception as e:
+        raise RuntimeError(f"Error retrieving autism score: {e}")
+
 def update_questionnaire_score_in_result(diagnostic_id, user_id, questionnaire_score):
     try:
         result = Result.query.filter_by(diagnostic_id=diagnostic_id, user_id=user_id).first()
