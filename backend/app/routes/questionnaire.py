@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.questionnaireService import QuestionnaireService
 from app.services.neural_network_service import questionnaire_analysis_service
+from app.services.resultService import update_questionnaire_score_in_result
 
 questionnaire_bp = Blueprint('questionnaire', __name__, url_prefix='/questionnaire')
 
@@ -27,11 +28,15 @@ def submit_questionnaire():
         # Actualizar el cuestionario con el resultado del análisis
         QuestionnaireService.update_questionnaire_score(questionnaire_id, questionnaire_analysis_result['prediction_score'])
 
+        # Guardar el resultado del análisis en la tabla Result
+        update_questionnaire_score_in_result(diagnostic_id, user_id, questionnaire_analysis_result['prediction_score'])
+        
         return jsonify({
             "message": "Cuestionario enviado con éxito",
             "diagnostic_id": diagnostic_id,
             "questionnaire_id": questionnaire_id,
-            "analysis_result": questionnaire_analysis_result['prediction_score']
+            "analysis_result": questionnaire_analysis_result['prediction_score'],
+            "notification": "Prediccion del questionnaire guardada en la tabla result"
         }), 201
 
     except Exception as e:

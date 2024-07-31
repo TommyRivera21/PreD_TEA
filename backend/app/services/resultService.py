@@ -17,8 +17,6 @@ def create_result(user_id, diagnostic_id, autism_score=None, image_path=None, vi
         db.session.add(result)
         db.session.commit()
         
-        log_average_files_score(user_id)
-        
         return result
     except Exception as e:
         db.session.rollback()
@@ -69,25 +67,23 @@ def get_results_by_user(user_id):
     except Exception as e:
         raise RuntimeError(f"Error retrieving results: {e}")
 
-def log_average_files_score(user_id):
+def update_questionnaire_score_in_result(diagnostic_id, user_id, questionnaire_score):
     try:
-        results = Result.query.filter_by(user_id=user_id).all()
-        if not results:
-            print(f"No results found for user ID {user_id}")
-            return
-        
-        total_score = 0
-        count = 0
-        for result in results:
-            if result.files_score is not None:
-                total_score += result.files_score
-                count += 1
-        
-        if count == 0:
-            print(f"No image scores found for user ID {user_id}")
-            return
-        
-        average_score = total_score / count
-        print(f"Average image score for user ID {user_id}: {average_score:.2f}")
+        result = Result.query.filter_by(diagnostic_id=diagnostic_id, user_id=user_id).first()
+        if result:
+            result.questionnaire_score = questionnaire_score
+            db.session.commit()
+            print("Prediccion del questionnaire guardada en la tabla result")
+        else:
+            new_result = Result(
+                user_id=user_id,
+                diagnostic_id=diagnostic_id,
+                questionnaire_score=questionnaire_score,
+                created_at=datetime.datetime.now()
+            )
+            db.session.add(new_result)
+            db.session.commit()
+            print("Prediccion del questionnaire guardada en la tabla result")
     except Exception as e:
-        print(f"Error calculating average files score: {e}")
+        db.session.rollback()
+        raise RuntimeError(f"Error updating result with questionnaire score: {e}")
