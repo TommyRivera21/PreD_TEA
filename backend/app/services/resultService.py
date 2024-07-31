@@ -23,19 +23,26 @@ def create_result(user_id, diagnostic_id, autism_score=None, image_path=None, vi
         raise RuntimeError(f"Error creating result: {e}")
 
 def insert_files_score_result(diagnostic_id, user_id, files_score):
-    result_entry = Result.query.filter_by(diagnostic_id=diagnostic_id).first()
-    if result_entry:
-        result_entry.files_score = files_score
-        db.session.commit()
-    else:
-        new_result = Result(
-            user_id=user_id,
-            diagnostic_id=diagnostic_id,
-            files_score=files_score,
-            autism_score=0.0  # Valor predeterminado
-        )
-        db.session.add(new_result)
-        db.session.commit()
+    try:
+        result_entry = Result.query.filter_by(diagnostic_id=diagnostic_id).first()
+        if result_entry:
+            result_entry.files_score = files_score
+            if result_entry.questionnaire_score is not None:
+                result_entry.autism_score = (files_score + result_entry.questionnaire_score) / 2
+                print(f"La predicción de autismo del infante es: {result_entry.autism_score}")
+            db.session.commit()
+        else:
+            new_result = Result(
+                user_id=user_id,
+                diagnostic_id=diagnostic_id,
+                files_score=files_score,
+                autism_score=0.0  # Valor predeterminado
+            )
+            db.session.add(new_result)
+            db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise RuntimeError(f"Error inserting files score result: {e}")
 
 def update_diagnostic_with_results(diagnostic_id, image_path=None, video_path=None, qa_pairs=None, autism_score=None, files_score=None):
     try:
@@ -72,8 +79,11 @@ def update_questionnaire_score_in_result(diagnostic_id, user_id, questionnaire_s
         result = Result.query.filter_by(diagnostic_id=diagnostic_id, user_id=user_id).first()
         if result:
             result.questionnaire_score = questionnaire_score
+            if result.files_score is not None:
+                result.autism_score = (result.files_score + questionnaire_score) / 2
+                print(f"La predicción de autismo del infante es: {result.autism_score}")
             db.session.commit()
-            print("Prediccion del questionnaire guardada en la tabla result")
+            print("Predicción del cuestionario guardada en la tabla result")
         else:
             new_result = Result(
                 user_id=user_id,
@@ -83,7 +93,7 @@ def update_questionnaire_score_in_result(diagnostic_id, user_id, questionnaire_s
             )
             db.session.add(new_result)
             db.session.commit()
-            print("Prediccion del questionnaire guardada en la tabla result")
+            print("Predicción del cuestionario guardada en la tabla result")
     except Exception as e:
         db.session.rollback()
         raise RuntimeError(f"Error updating result with questionnaire score: {e}")
