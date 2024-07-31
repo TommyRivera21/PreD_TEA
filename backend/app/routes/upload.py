@@ -89,7 +89,11 @@ def upload_video():
         # Actualizar el registro del video con la puntuación de predicción
         video.video_prediction_score = result['prediction_score']
         db.session.commit()
-        return jsonify({"video_id": video.id, "video_path": video.video_path, "result": result}), 201
+        
+        # Guardar el valor de video_prediction_score en files_score
+        insert_files_score_result(diagnostic_id, user_id, video.video_prediction_score)
+
+        return jsonify({"video_id": video.id, "video_path": video.video_path, "result": result, "msg": "Predicción del video guardada en la tabla result"}), 201
     except Exception as e:
         print(f"Error analyzing video {video.id}: {e}")
         return jsonify({"error": str(e)}), 500
