@@ -189,13 +189,13 @@ export const submitQuestionnaire = async (
   }
 };
 
-export const getResults = async (diagnosticId: number): Promise<ResultsResponse> => {
+export const getAutismScore = async (diagnosticId: number): Promise<number> => {
   try {
     const token = getCurrentToken();
     if (!token) throw new Error("No authentication token found");
 
     const makeRequest = async (authToken: string) => {
-      return axios.get<ResultsResponse>(`${API_URL}/results/${diagnosticId}`, {
+      return axios.get<{ autism_score: number }>(`${API_URL}/results/${diagnosticId}/autism_score`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -203,15 +203,13 @@ export const getResults = async (diagnosticId: number): Promise<ResultsResponse>
     };
 
     try {
-      const response: AxiosResponse<ResultsResponse> = await makeRequest(token);
-      console.log("Results fetched successfully:", response.data);
-      return response.data;
+      const response: AxiosResponse<{ autism_score: number }> = await makeRequest(token);
+      return response.data.autism_score;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         const newToken = await refreshToken();
-        const response: AxiosResponse<ResultsResponse> = await makeRequest(newToken);
-        console.log("Results fetched successfully after token refresh:", response.data);
-        return response.data;
+        const response: AxiosResponse<{ autism_score: number }> = await makeRequest(newToken);
+        return response.data.autism_score;
       }
       throw error;
     }
