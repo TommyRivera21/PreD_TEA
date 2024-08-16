@@ -1,1 +1,2 @@
 frontend/src/assets/video-diagnostico-autismo.mp4 filter=lfs diff=lfs merge=lfs -text
+backend/app/data/** filter=lfs diff=lfs merge=lfs -text

@@ -36,7 +36,7 @@ def submit_questionnaire():
             "diagnostic_id": diagnostic_id,
             "questionnaire_id": questionnaire_id,
             "analysis_result": questionnaire_analysis_result['prediction_score'],
-            "notification": "Prediccion del questionnaire guardada en la tabla result"
+            "notification": "Predicción del questionnaire guardada en result"
         }), 201
 
     except Exception as e:

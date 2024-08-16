@@ -1,7 +1,6 @@
 from app.models import db, Questionnaire
 from sqlalchemy.exc import SQLAlchemyError
 from typing import List, Dict
-from app.services.neural_network_service import questionnaire_analysis_service
 import json
 
 class QuestionnaireService:
@@ -32,7 +31,6 @@ class QuestionnaireService:
             db.session.add(questionnaire)
             db.session.commit()
 
-            # Devuelve el ID del cuestionario creado para su posterior análisis
             return questionnaire.id
         except ValueError as e:
             db.session.rollback()

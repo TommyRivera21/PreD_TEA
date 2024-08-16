@@ -4,8 +4,8 @@ import numpy as np
 from tensorflow import keras
 from app.config import Config
 
-# Ruta del modelo
-model_path = os.path.join(Config.MODEL_DIR, 'image_model.h5')
+# Ruta del modelo con la nueva extensión
+model_path = os.path.join(Config.MODEL_DIR, 'image_model.keras')
 
 # Verificar existencia y tamaño del archivo
 if os.path.exists(model_path):
@@ -39,7 +39,7 @@ def image_preprocessing_neural_network(image_path):
         return processed_image
     except Exception as e:
         raise RuntimeError(f"Error en el preprocesamiento de la imagen: {e}")
-    
+
 def image_analysis_neural_network(image_path):
     if image_model is None:
         raise RuntimeError("El modelo no se cargó correctamente. No se puede realizar el análisis.")
