@@ -14,12 +14,3 @@ class Config:
     VALIDATION_DATA_DIR = os.getenv('VALIDATION_DATA_PATH')
     GENERATION_QUESTIONNAIRE_TRAINING_DATA_DIR = os.getenv('GENERATION_QUESTIONNAIRE_TRAINING_DATA_PATH')
     QUESTIONNAIRE_TRAINING_DATA_DIR = os.getenv('QUESTIONNAIRE_TRAINING_DATA_PATH')
-    
-# Verificar las rutas de destino
-print(f"Ruta para fotos: {Config.UPLOADED_PHOTOS_DEST}")
-print(f"Ruta para videos: {Config.UPLOADED_VIDEOS_DEST}")
-print(f"Ruta para modelos: {Config.MODEL_DIR}")
-print(f"Ruta para datos de entrenamiento: {Config.TRAINING_DATA_DIR}")
-print(f"Ruta para datos de validación: {Config.VALIDATION_DATA_DIR}")
-print(f"Ruta para datos de cuestionario generados: {Config.GENERATION_QUESTIONNAIRE_TRAINING_DATA_DIR}")
-print(f"Ruta para datos de cuestionario: {Config.QUESTIONNAIRE_TRAINING_DATA_DIR}")

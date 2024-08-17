@@ -5,7 +5,7 @@ from tensorflow import keras
 from app.config import Config
 
 # Ruta del modelo
-model_path = os.path.join(Config.MODEL_DIR, 'video_model.h5')
+model_path = os.path.join(Config.MODEL_DIR, 'video_model.keras')
 
 # Verificar existencia y tamaño del archivo
 if os.path.exists(model_path):
@@ -24,27 +24,29 @@ except Exception as e:
 try:
     video_model = keras.models.load_model(model_path)
     print("Modelo cargado exitosamente")
+    video_model.summary()  # Imprime el resumen del modelo para verificar la arquitectura
 except Exception as e:
     raise RuntimeError(f"Error al cargar el modelo: {e}")
 
-def video_preprocessing_neural_network(video_path):
+def video_preprocessing_neural_network(video_path, num_frames=10, img_height=64, img_width=64):
     try:
         cap = cv2.VideoCapture(video_path)
         frames = []
-        while True:
+        while len(frames) < num_frames:
             ret, frame = cap.read()
             if not ret:
                 break
-            frame = cv2.resize(frame, (64, 64))  # Ajusta el tamaño de los frames aquí
+            frame = cv2.resize(frame, (img_width, img_height))  # Ajusta el tamaño de los frames aquí
             frame = frame / 255.0
             frames.append(frame)
         cap.release()
+
+        # Si hay menos frames que num_frames, rellena con el último frame
+        while len(frames) < num_frames:
+            frames.append(frames[-1])
+        
         frames = np.array(frames)
-        
-        # Aplanar cada frame de (64, 64, 3) a (12288)
-        frames = frames.reshape(frames.shape[0], 64*64*3)
-        
-        # Agregar una dimensión adicional para el batch
+        # Asegúrate de que la forma sea [1, num_frames, img_height, img_width, num_channels]
         frames = np.expand_dims(frames, axis=0)
         
         print(f"Forma de los frames procesados: {frames.shape}")  # Registro para verificar la forma
@@ -63,6 +65,6 @@ def video_analysis_neural_network(video_path):
     try:
         prediction = video_model.predict(processed_video)
         print(f"Predicción cruda: {prediction}")  # Registro para verificar la salida
-        return prediction[0][0]
+        return prediction[0][0]  # Ajustar si es necesario
     except Exception as e:
         raise RuntimeError(f"Error al realizar la predicción: {e}")
