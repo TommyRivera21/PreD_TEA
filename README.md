@@ -10,11 +10,11 @@ Este proyecto implementa un sistema basado en redes neuronales artificiales para
 ## Estructura del Proyecto
 
 ### Backend
-- `app/`: Contiene la aplicación Flask y los módulos de backend.
+- `app/`: Contiene los diferentes módulos y archivos del backend.
   - `__init__.py`: Inicializa la aplicación Flask.
   - `config.py`: Configuracion para la variables de entorno.
   - `models.py`: Modelos de la base de datos.
-  - `data/`: Contiene los datos el entranamiento de los modelos imagen, video y questionnaire.
+  - `data/`: Contiene los datos para el entranamiento de los modelos imagen, video y questionnaire.
   - `neural_network/`: Contiene la logica para procesar las imagenes, videos y cuestionarios.
     - `models/`: Carga los modelos de red neuronal.
   - `routes/`: Contiene las rutas de la API.

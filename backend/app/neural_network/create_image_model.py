@@ -3,6 +3,7 @@ import sys
 from tensorflow.keras.models import Sequential  # type: ignore
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Input  # type: ignore
 from tensorflow.keras.preprocessing.image import ImageDataGenerator  # type: ignore
+from tensorflow.keras.callbacks import TensorBoard  # type: ignore
 from app.config import Config
 
 def create_image_model():
@@ -21,7 +22,7 @@ def create_image_model():
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-def train_image_model(model, train_dir, validation_dir, batch_size=32, epochs=10):
+def train_image_model(model, train_dir, validation_dir, batch_size=32, epochs=50):
     # Verifica que las rutas existan
     assert os.path.exists(train_dir), f"La ruta de entrenamiento {train_dir} no existe."
     assert os.path.exists(validation_dir), f"La ruta de validación {validation_dir} no existe."
@@ -53,13 +54,23 @@ def train_image_model(model, train_dir, validation_dir, batch_size=32, epochs=10
         class_mode='binary'
     )
 
+    # Crear el directorio para los logs de TensorBoard
+    os.makedirs(Config.TENSORBOARD_LOG_DIR, exist_ok=True)
+    
+    # Configurar TensorBoard callback
+    tensorboard_callback = TensorBoard(
+        log_dir=Config.TENSORBOARD_LOG_DIR,
+        histogram_freq=1
+    )
+
     # Entrenar el modelo
-    model.fit(
+    history = model.fit(
         train_generator,
         steps_per_epoch=train_generator.samples // batch_size,
         epochs=epochs,
         validation_data=validation_generator,
-        validation_steps=validation_generator.samples // batch_size
+        validation_steps=validation_generator.samples // batch_size,
+        callbacks=[tensorboard_callback]  # Agregar el callback de TensorBoard
     )
 
 if __name__ == "__main__":

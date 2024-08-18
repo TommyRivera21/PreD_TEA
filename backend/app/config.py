@@ -1,3 +1,5 @@
+from datetime import datetime
+import os
 import os
 from dotenv import load_dotenv
 
@@ -14,3 +16,4 @@ class Config:
     VALIDATION_DATA_DIR = os.getenv('VALIDATION_DATA_PATH')
     GENERATION_QUESTIONNAIRE_TRAINING_DATA_DIR = os.getenv('GENERATION_QUESTIONNAIRE_TRAINING_DATA_PATH')
     QUESTIONNAIRE_TRAINING_DATA_DIR = os.getenv('QUESTIONNAIRE_TRAINING_DATA_PATH')
+    TENSORBOARD_LOG_DIR = os.getenv('TENSORBOARD_LOG_PATH') + f'/{datetime.now().strftime("%Y%m%d-%H%M%S")}'

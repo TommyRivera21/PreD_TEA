@@ -2,9 +2,11 @@ import sys
 import os
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.models import Sequential # type: ignore
-from tensorflow.keras.layers import Dense, LSTM, TimeDistributed, Flatten, Input # type: ignore
-from tensorflow.keras.preprocessing.image import ImageDataGenerator# type: ignore
+from tensorflow.keras.models import Sequential  # type: ignore
+from tensorflow.keras.layers import Dense, LSTM, TimeDistributed, Flatten, Input  # type: ignore
+from tensorflow.keras.preprocessing.image import ImageDataGenerator  # type: ignore
+from tensorflow.keras.callbacks import TensorBoard # type: ignore
+from datetime import datetime
 
 # Añadir el directorio raíz al PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -20,13 +22,13 @@ IMG_HEIGHT = 64
 IMG_WIDTH = 64
 BATCH_SIZE = 16
 NUM_FRAMES = 10
-EPOCHS = 20
+EPOCHS = 50  # Aumentado a 50 épocas
 
 def create_video_model(num_frames, img_height, img_width, num_channels):
     model = Sequential([
         Input(shape=(num_frames, img_height, img_width, num_channels)),
         TimeDistributed(Flatten()),
-        LSTM(128, return_sequences=False),  # Cambiado a return_sequences=False
+        LSTM(128, return_sequences=False),
         Dense(1, activation='sigmoid')
     ])
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
@@ -63,15 +65,20 @@ def check_data_generator(data_generator):
     print("Batch Y shape:", batch_y.shape)
 
 def train_model(model, train_generator, validation_generator, train_steps_per_epoch, validation_steps_per_epoch, epochs):
+    # Configuración de TensorBoard
+    tensorboard_callback = TensorBoard(log_dir=f'{Config.TENSORBOARD_LOG_DIR}/{datetime.now().strftime("%Y%m%d-%H%M%S")}', 
+                                       histogram_freq=1)
+
     for epoch in range(epochs):
         print(f"Iniciando epoch {epoch+1}/{epochs}")
         try:
             history = model.fit(
                 train_generator,
                 steps_per_epoch=train_steps_per_epoch,
-                epochs=1,
+                epochs=1,  # Entrenando epoch a la vez
                 validation_data=validation_generator,
-                validation_steps=validation_steps_per_epoch
+                validation_steps=validation_steps_per_epoch,
+                callbacks=[tensorboard_callback]
             )
             print(f"Epoch {epoch+1} completado")
             print("Train Loss:", history.history['loss'][-1])
@@ -86,6 +93,7 @@ if __name__ == "__main__":
     video_model = create_video_model(NUM_FRAMES, IMG_HEIGHT, IMG_WIDTH, num_channels)
     
     os.makedirs(Config.MODEL_DIR, exist_ok=True)
+    os.makedirs(Config.TENSORBOARD_LOG_DIR, exist_ok=True)  # Crear directorio para TensorBoard
     
     datagen = ImageDataGenerator(rescale=1./255)
     

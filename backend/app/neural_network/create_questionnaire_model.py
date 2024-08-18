@@ -2,9 +2,11 @@ import os
 import json
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Sequential # type: ignore
-from tensorflow.keras.layers import Dense, Input # type: ignore
-from tensorflow.keras.optimizers import Adam # type: ignore
+from tensorflow.keras.models import Sequential  # type: ignore
+from tensorflow.keras.layers import Dense, Input  # type: ignore
+from tensorflow.keras.optimizers import Adam  # type: ignore
+from tensorflow.keras.callbacks import TensorBoard # type: ignore
+from datetime import datetime
 from app.config import Config
 
 # Mapeo de respuestas a valores numéricos con ponderación correcta
@@ -66,7 +68,18 @@ def train_and_save_model():
     data_path = Config.QUESTIONNAIRE_TRAINING_DATA_DIR
     X, y = load_training_data(data_path)
     
-    model.fit(X, y, epochs=50, batch_size=32, validation_split=0.2)
+    # Configuración de TensorBoard
+    tensorboard_log_dir = os.path.join(Config.TENSORBOARD_LOG_DIR, datetime.now().strftime("%Y%m%d-%H%M%S"))
+    os.makedirs(tensorboard_log_dir, exist_ok=True)
+    tensorboard_callback = TensorBoard(log_dir=tensorboard_log_dir, histogram_freq=1)
+    
+    model.fit(
+        X, y,
+        epochs=50,
+        batch_size=32,
+        validation_split=0.2,
+        callbacks=[tensorboard_callback]  # Agregar el callback de TensorBoard
+    )
     
     model_path = os.path.join(Config.MODEL_DIR, 'questionnaire_model.keras')
     model.save(model_path)
