@@ -5,16 +5,16 @@ from app.config import Config
 
 # Definición de las preguntas y respuestas
 questions = [
-    "¿Su hijo(a) usa palabras para comunicar sus necesidades y deseos?",
-    "¿Su hijo(a) hace contacto visual mientras habla con otras personas?",
-    "¿Su hijo(a) responde a su nombre cuando se le llama?",
-    "¿Su hijo(a) muestra interés en jugar con otros niños?",
-    "¿Su hijo(a) imita las acciones de otros (por ejemplo, simula cocinar, imita gestos)?",
-    "¿Su hijo(a) parece ajeno(a) a los sentimientos de los demás?",
-    "¿Su hijo(a) realiza movimientos repetitivos como aletear las manos, balancearse o girar?",
-    "¿Su hijo(a) tiene rituales o rutinas que sigue de manera rígida?",
-    "¿Su hijo(a) juega con juguetes de manera inusual (por ejemplo, alinear objetos en lugar de usarlos de manera imaginativa)?",
-    "¿Su hijo(a) muestra una sensibilidad extrema a ciertos sonidos, luces o texturas?",
+    "¿Tu hijo te mira cuando lo llamas por su nombre?",
+    "¿Es fácil es para usted establecer contacto visual con su hijo?",
+    "¿Su hijo señala para indicar que quiere algo? (por ejemplo, un juguete que está fuera de su alcance)",
+    "¿Su hijo finge? (por ejemplo, cuidar muñecas, hablar por un teléfono de juguete)?",
+    "¿Su hijo finge? (por ejemplo, cuidar muñecas, hablar por un teléfono de juguete)",
+    "¿Su hijo sigue hacia donde usted mira?",
+    "¿Si usted o alguien más en la familia está visiblemente molesto, ¿su hijo muestra signos de querer consolarlo? (por ejemplo, acariciar el cabello, abrazarlos)",
+    "¿Su hijo utilizó palabras de manera coherente durante sus primeras etapas del habla?",
+    "¿Su hijo utiliza gestos sencillos? (por ejemplo, decir adiós)",
+    "¿Su hijo mira fijamente a la nada sin ningún propósito aparente?",
     "¿Su hijo(a) parece no notar el dolor o la temperatura de manera adecuada?",
     "¿Su hijo(a) tiene un desarrollo del lenguaje retrasado en comparación con otros niños de su edad?",
     "¿Su hijo(a) repite palabras o frases de manera repetitiva (ecolalia)?",
@@ -46,7 +46,7 @@ save_path = Config.GENERATION_QUESTIONNAIRE_TRAINING_DATA_DIR
 os.makedirs(save_path, exist_ok=True)
 
 # Generar datos sintéticos
-def generate_synthetic_data(num_samples=10000):
+def generate_synthetic_data(num_samples=50000):
     data = []
     for _ in range(num_samples):
         sample = [{"question": question, "answer": random.choice(answers)} for question in questions]

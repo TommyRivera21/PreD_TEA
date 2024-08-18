@@ -7,6 +7,7 @@ from tensorflow.keras.layers import Dense, LSTM, TimeDistributed, Flatten, Input
 from tensorflow.keras.preprocessing.image import ImageDataGenerator  # type: ignore
 from tensorflow.keras.callbacks import TensorBoard # type: ignore
 from datetime import datetime
+from tensorflow.keras.metrics import Precision, Recall  # type: ignore
 
 # Añadir el directorio raíz al PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -22,7 +23,7 @@ IMG_HEIGHT = 64
 IMG_WIDTH = 64
 BATCH_SIZE = 16
 NUM_FRAMES = 10
-EPOCHS = 50  # Aumentado a 50 épocas
+EPOCHS = 50
 
 def create_video_model(num_frames, img_height, img_width, num_channels):
     model = Sequential([
@@ -31,7 +32,9 @@ def create_video_model(num_frames, img_height, img_width, num_channels):
         LSTM(128, return_sequences=False),
         Dense(1, activation='sigmoid')
     ])
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001), 
+                  loss='binary_crossentropy', 
+                  metrics=['accuracy', Precision(), Recall()])
     model.summary()
     return model
 
@@ -83,6 +86,9 @@ def train_model(model, train_generator, validation_generator, train_steps_per_ep
             print(f"Epoch {epoch+1} completado")
             print("Train Loss:", history.history['loss'][-1])
             print("Train Accuracy:", history.history['accuracy'][-1])
+            print("Train Precision:", history.history['precision'][-1])
+            print("Train Recall:", history.history['recall'][-1])
+
         except KeyboardInterrupt:
             print("Interrupción del entrenamiento")
             break

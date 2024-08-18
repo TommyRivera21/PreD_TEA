@@ -4,6 +4,7 @@ from tensorflow.keras.models import Sequential  # type: ignore
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Input  # type: ignore
 from tensorflow.keras.preprocessing.image import ImageDataGenerator  # type: ignore
 from tensorflow.keras.callbacks import TensorBoard  # type: ignore
+from tensorflow.keras.metrics import Precision, Recall  # type: ignore
 from app.config import Config
 
 def create_image_model():
@@ -19,7 +20,8 @@ def create_image_model():
         Dense(128, activation='relu'),
         Dense(1, activation='sigmoid')
     ])
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    # Añadir Precision y Recall como métricas
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', Precision(), Recall()])
     return model
 
 def train_image_model(model, train_dir, validation_dir, batch_size=32, epochs=50):
