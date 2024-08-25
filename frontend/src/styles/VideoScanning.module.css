@@ -8,7 +8,7 @@
 
 .titleDiagnostic {
   margin: 10px;
-  background-color: #d58cfc;
+  background-color: #7a409c;
   padding: 20px;
   color: white;
   border-radius: 5px;
@@ -18,7 +18,7 @@
 
 .countdown {
   margin: 10px;
-  background-color: #d58cfc;
+  background-color: #ffde85;
   padding: 10px;
   color: white;
   border-radius: 5px;
@@ -31,7 +31,7 @@
 
 .mainVideo {
   width: 375px;
-  border: 3px solid #d58cfc;
+  border: 3px solid #7a409c;
 }
 
 .webcamContainer {
@@ -43,7 +43,7 @@
 
 .webcamFeed {
   width: 275px;
-  border: 3px solid #d58cfc;
+  border: 3px solid #7a409c;
 }
 
 .overlay {
@@ -56,7 +56,7 @@
 }
 
 .recordingIndicator {
-  color: #d58cfc;
+  color: #7a409c;
   font-size: 25px;
   animation: blink 1s infinite;
 }
@@ -73,11 +73,11 @@
 }
 
 .recordingTime {
-  background: #d58cfc;
+  background: #7a409c;
   color: white;
   padding: 5px;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .buttonContainer {
@@ -87,12 +87,11 @@
 }
 
 .pauseButton,
-.resumeButton,
-.stopButton {
+.resumeButton {
   padding: 10px 20px;
-  background-color: #d58cfc;
+  background-color: #fbb1b1;
   color: white;
-  border: 2px solid #d58cfc;
+  border: 2px solid #fbb1b1;
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
@@ -100,9 +99,25 @@
 }
 
 .pauseButton:hover,
-.resumeButton:hover,
+.resumeButton:hover {
+  background-color: white;
+  color: #fbb1b1;
+  border: 2px solid #fbb1b1;
+}
+
+.stopButton {
+  padding: 10px 20px;
+  background-color: #a2d5a3;
+  color: white;
+  border: 2px solid #a2d5a3;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
 .stopButton:hover {
   background-color: white;
-  color: #d58cfc;
-  border: 2px solid #d58cfc;
+  color: #a2d5a3;
+  border: 2px solid #a2d5a3;
 }

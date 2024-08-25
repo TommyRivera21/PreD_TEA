@@ -1,7 +1,7 @@
 .questionnaireContainer {
   padding: 20px;
   padding-top: 125px;
-  max-width: 700px;
+  max-width: 900px;
   margin: 0 auto;
   overflow-y: auto;
   height: 100vh;
@@ -13,22 +13,23 @@
 }
 
 .questionnaireContainer::-webkit-scrollbar-track {
-  background: white;
+  background: #f3e6ff;
 }
 
 .questionnaireContainer::-webkit-scrollbar-thumb {
-  background: white;
+  background: #f3e6ff;
   border-radius: 10px;
 }
 
 .titleQuestionnaire {
   margin-top: 0;
   color: white;
-  background-color: #d58cfc;
+  background-color: #7a409c;
   align-items: center;
   justify-content: center;
   display: flex;
-  padding: 10px;
+  padding: 20px;
+  border-radius: 5px;
   max-width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -69,7 +70,7 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid #d58cfc;
+  border: 2px solid #7a409c;
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
@@ -85,7 +86,7 @@ input[type="radio"]:checked + .radioCustom::after {
   display: block;
   width: 10px;
   height: 10px;
-  background: #d58cfc;
+  background: #7a409c;
   border-radius: 50%;
   position: absolute;
   top: 50%;
@@ -105,9 +106,9 @@ input[type="radio"]:checked + .radioCustom::after {
 .btnQuestionnaire {
   padding: 10px 20px;
   margin-top: 25px;
-  background-color: #d58cfc;
+  background-color: #b374e0;
   color: white;
-  border: 2px solid #d58cfc;
+  border: 2px solid #b374e0;
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
@@ -119,6 +120,6 @@ input[type="radio"]:checked + .radioCustom::after {
 
 .btnQuestionnaire:hover {
   background-color: white;
-  color: #d58cfc;
-  border: 2px solid #d58cfc;
+  color: #b374e0;
+  border: 2px solid #b374e0;
 }

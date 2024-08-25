@@ -23,7 +23,7 @@ const Register: React.FC = () => {
 
   return (
     <div className={styles.registerContainer}>
-      <h1>Registro</h1>
+      <h1 className={styles.titleRegister}>Registrate</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <input
@@ -32,7 +32,7 @@ const Register: React.FC = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className={styles.input}
+            className={styles.inputRegister}
           />
         </div>
         <div>
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className={styles.input}
+            className={styles.inputRegister}
           />
         </div>
         <div>
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className={styles.input}
+            className={styles.inputRegister}
           />
         </div>
         {error && <p className={styles.errorMessage}>{error}</p>}

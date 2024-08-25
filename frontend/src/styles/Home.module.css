@@ -10,21 +10,21 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  color: white;
+  color: #ffffff;
   gap: 20px;
   padding-left: 20px;
 }
 
 .titleOne {
-  color: white;
-  background-color: #d58cfc;
+  color: #ffffff;
+  background-color: #b374e0;
   text-align: left;
   padding: 20px;
   border-radius: 5px;
 }
 
 .description {
-  color: white;
+  color: #ffffff;
   background-color: #d58cfc;
   text-align: left;
   padding: 20px;
@@ -40,16 +40,16 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #d58cfc;
-  color: white;
+  background-color: #b374e0;
+  color: #ffffff;
   transition: background-color 0.3s ease, color 0.3s ease,
     border-color 0.3s ease;
 }
 
 .btnHome:hover {
-  background-color: white;
-  color: #d58cfc;
-  border-color: #d58cfc;
+  background-color: #ffffff;
+  color: #b374e0;
+  border-color: #b374e0;
 }
 
 .btnHome:focus,

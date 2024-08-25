@@ -117,8 +117,7 @@ const Results: React.FC = () => {
 
     g.append("path")
       .attr("class", styles.chartFill)
-      .attr("d", valueArc as any)
-      .style("fill", "url(#gaugeGradient)");
+      .attr("d", valueArc as any);
 
     g.append("text")
       .attr("class", styles.chartText)
@@ -155,10 +154,10 @@ const Results: React.FC = () => {
         <div className={styles.chartContainer}>
           <svg ref={chartRef}></svg>
         </div>
-        <p>El porcentaje estimado de TEA es: {teaPercentage}%</p>
+        <p className={styles.teaPercentage}>El porcentaje estimado de TEA es: {teaPercentage}%</p>
         <h2>Hospitales</h2>
         <p>
-          Aquí se detalla información de contacto y dirección de hospitales
+          A continuacion se detalla información de contacto y dirección de hospitales
           capacitados para realizar un verdadero análisis para determinar si el
           infante tiene TEA
         </p>

@@ -8,7 +8,7 @@
 
 .titleDiagnostic {
   margin: 10px auto;
-  background-color: #d58cfc;
+  background-color: #7a409c;
   padding: 20px;
   color: white;
   border-radius: 5px;
@@ -27,9 +27,9 @@
 .uploadImages,
 .confirmButton {
   padding: 10px 20px;
-  background-color: #d58cfc;
+  background-color: #b374e0;
   color: white;
-  border: 2px solid #d58cfc;
+  border: 2px solid #b374e0;
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
@@ -39,8 +39,8 @@
 .uploadImages:hover,
 .confirmButton:hover {
   background-color: white;
-  color: #d58cfc;
-  border: 2px solid #d58cfc;
+  color: #b374e0;
+  border: 2px solid #b374e0;
 }
 
 input[type="file"] {

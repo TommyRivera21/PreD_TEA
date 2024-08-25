@@ -1,12 +1,4 @@
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: white;
-  color: #333;
-  line-height: 1.6;
-}
-
 .registerContainer {
-  padding: 20px;
   display: flex;
   flex-direction: column;  
   justify-content: center;
@@ -14,15 +6,15 @@ body {
   height: 100vh;  
 }
 
-.registerContainer h1 {
-  color: white;
-  background-color: #e5b3fe;
-  padding: 5px;
+.titleRegister {
+  width: 100%;
+  color: #ffffff;
+  background-color: #7a409c;
   border-radius: 5px;
   text-align: center;
-  margin-bottom: 20px; 
-  width: 100%;
-  max-width: 300px;
+  margin-bottom: 10px;
+  padding: 20px;
+  max-width: 285px;
 }
 
 .registerContainer form {
@@ -34,41 +26,34 @@ body {
   padding: 10px;
 }
 
-.registerContainer input {
-  width: 100%;
+.inputRegister {
+  width: 93%;
   padding: 10px;
   font-size: 16px;
-  background-color: white;
-  border: 2px solid #e5b3fe;
+  background-color: #ffffff;
+  border: 2px solid #b374e0;
   border-radius: 5px;
-  box-sizing: border-box;
+  margin-top: 10px;
   color : black;
 }
 
-.register button {
-  padding: 10px;
-  font-size: 16px;
-  background-color: #282c34;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
 .btnRegister {
+  width: 100%;
   padding: 10px;
   font-size: 16px;
-  background-color: #e5b3fe;
-  color: white;
+  background-color: #b374e0;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  margin-top: 10px;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .btnRegister:hover {
-  background-color: white;
-  color: #e5b3fe;
-  border: 2px solid #e5b3fe;
+  background-color: #ffffff;
+  color: #b374e0;
+  border: 2px solid #b374e0;
 }
 
 .errorMessage {

@@ -32,7 +32,7 @@ const Login: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className={styles.input}
+            className={styles.inputLogin}
           />
           <input
             type="password"
@@ -40,7 +40,7 @@ const Login: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className={styles.input}
+            className={styles.inputLogin}
           />
           <button type="submit" className={styles.btnLogin}>
             Acceder
